@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="wikigetter.js"></script>
+        <link rel="stylesheet" href="dist/reveal.css">
+        <link rel="stylesheet" href="dist/theme/white.css">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section id="title"></section>
+                <section>The End</section>
+            </div>
+        </div>
+        <script src="dist/reveal.js"></script>
+        <script src="game.js"></script>
+        <script>
+            new GameManager(function(){
+                Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", slideNumber: true, mouseWheel: true});
+            });
+        </script>
+    </body>
+</html>
