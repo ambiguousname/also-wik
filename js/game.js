@@ -22,17 +22,31 @@ class GameManager {
         localStorage.setItem("title", this.title);
     }
 
+    async getImagePatient(index){
+        let img_url = await this.wikihow.getArticleImage();
+        this.images.push(img_url);
+        return new Promise(function(resolve){
+            setTimeout(function(){
+                resolve();
+            }, 3000);
+        });
+    }
+
     async setImages(){
         for (var i = 0; i < this.numImages; i++){
-            let img_url = await this.wikihow.getArticleImage();
-            this.images.push(img_url);
+            await this.getImagePatient();
         }
         localStorage.setItem("images", JSON.stringify(this.images));
     }
 
     async getGameData(){
         await this.setTitle();
-        await this.setImages();
+        // We've already made a request, so now we have to wait.
+        await new Promise(function(resolve){
+            setTimeout(function(){
+                this.setImages().then(resolve);
+            }, 3000);
+        });
     }
 
     createSlideshow(){

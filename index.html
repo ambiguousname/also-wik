@@ -51,10 +51,6 @@
                     <option value="Times New Roman">Times New Roman</option>
                 </select></p>
                 <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=50 oninput="updateSize()">px</p>
-                <p><button class="btn btn-primary shadow-none" onclick="generateTitle()" id="titlePreview">Randomize Title</button>
-                    <button class="btn btn-primary shadow-none" onclick="hideTitle()">Hide Title Preview</button></p>
-
-                <p>
                 <button class="btn btn-primary shadow-none" onclick="resetSettings()">Reset to Default</button>
                 <button class="btn btn-primary shadow-none" onclick="present()">Present!</button>
                 </p>
@@ -108,19 +104,6 @@
                     updateSize();
                 }
             });
-
-            function generateTitle(){
-                alert("generateTitle attempts to use xhr, uncomment once testing is done.");
-                /*gm.setTitle().then(function(title){
-                    $("#titlePreview").text(title);
-                });*/
-                $("#titlePreview").text("Test");
-            }
-
-            function hideTitle(){
-                $("#titlePreview").text("Randomize Title");
-                gm.title = "";
-            }
         </script>
     </body>
 </html>

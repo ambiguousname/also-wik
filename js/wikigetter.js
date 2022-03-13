@@ -1,5 +1,22 @@
 class WikihowGetter {
+  constructor(){
+    this.canAccess = true;
+  }
+
   xmlLoadHTML(url){
+    if (this.canAccess){
+      this.canAccess = false;
+      setTimeout(function(){
+        this.canAccess = true;
+      }, 3000);
+    } else {
+      console.log("Too many requests! Staggering...");
+      setTimeout(function(){
+        xmlLoadHTML(url);
+      }, 3000);
+      return;
+    }
+
     let xml = new XMLHttpRequest();
     let promise = new Promise(function(resolve, reject){
       xml.addEventListener("loadend", function(){ 
