@@ -10,7 +10,7 @@ class WikihowGetter {
         this.canAccess = true;
       }, 3000);
     } else {
-      console.log("Too many requests! Staggering...");
+      console.error("Too many requests to wikiHow! Staggering...");
       setTimeout(function(){
         xmlLoadHTML(url);
       }, 3000);
