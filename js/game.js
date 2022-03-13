@@ -18,6 +18,10 @@ class GameManager {
             this.createSlideshow();
         }
 
+        this.timerActive = false;
+
+        var self = this;
+
         // If we're at the last slide, we want to stop storing the current slideshow to allow for new ones:
         this.Reveal.on('slidechanged', function(){
             if (Reveal.isLastSlide()){
@@ -28,6 +32,14 @@ class GameManager {
                 localStorage.setItem("title", gm.title);
                 localStorage.setItem("images", JSON.stringify(gm.images));
                 localStorage.setItem("currSlide", Reveal.getState().indexh);
+                if (Reveal.getTotalSlides() - Reveal.getSlidePastCount() === 1 && Reveal.getSlidePastCount() - 1 < self.num){
+                    self.showTimer();
+                    if (!self.timerActive){
+                        self.resetTimer();
+                    }
+                } else if (self.timerActive){
+                    self.hideTimer();
+                }
             }
         });
     }
@@ -47,7 +59,9 @@ class GameManager {
         let img_url = await this.wikihow.getArticleImage();
         this.images.push(img_url);
         localStorage.setItem("images", JSON.stringify(this.images));
+        $("<section><img src=\"" + img_url + "\"/></section>").insertBefore("#end");
         console.log("Added " + img_url);
+        this.Reveal.sync();
     }
 
     createTimer(){
@@ -68,11 +82,19 @@ class GameManager {
 
     resetTimer(){
         let time = 5000;
+        this.timerActive = true;
+        let Reveal = this.Reveal;
         var timeInterval = setInterval(function(){
             time -= 500;
             this.timer.value(time);
+            // 3 seconds have passed:
+            if (time === 2000 && Reveal.getSlidePastCount() - 1 >= this.numImages){
+                this.addImage();
+            }
             if (time <= 0){
                 clearInterval(timeInterval);
+                this.timerActive = false;
+                this.hideTimer();
             }
         }, 500);
     }
@@ -82,7 +104,6 @@ class GameManager {
         if (this.timer === null){
             this.createTimer();
         }
-        this.resetTimer();
         this.timer.show();
     }
 
