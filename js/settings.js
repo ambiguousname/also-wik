@@ -4,11 +4,12 @@ function resetSettings(){
     $("#secondary-color").val("#000000");
     $("#font").val("Segoe UI");
     $("#fontSize").val("16");
+    $("#imageSize").val("6");
+    $("#presentcode").val("");
     changeSecondaryColor();
     changePrimaryColor();
     updateFont();
     updateSize();
-    hideTitle();
 }
 
 function updateSlideColors(){
@@ -62,4 +63,9 @@ function updateSize(){
     $(".btn-primary").css("font-size", size + "px")
     $(".form-select").css("font-size", size+"px");
     localStorage.setItem("font-size", size);
+}
+
+function copyToClipboard(){
+    $("#codeText").select();
+    navigator.clipboard.writeText($("#codeText").text());
 }

@@ -67,12 +67,14 @@ class GameManager {
         for (var i = 0; i < this.numImages; i++){
             $("<section><img src=\"" + self.images[i] + "\"></section>").insertAfter("#title-slide");
         }
+
+        $("#codeText").text(this.dumpDataToURL());
         
         this.init();
     }
 
     dumpDataToURL(){
-        var string = "?title=" + this.title + "";
+        var string = "title=" + this.title + "";
         for (var i = 0; i < this.numImages; i++){
             var img_url = this.images[i];
             // Get rid of the beginnings and ends of the image we already know about:
@@ -89,7 +91,7 @@ class GameManager {
             for (const [key, value] of params){
                 if (key == "title"){
                     this.title = value;
-                } else if (key.match(/img\d+/g).length === 1){
+                } else if (key.match(/img\d+/g) !== null){
                     let int = parseInt(key.substr(3));
                     // Placeholder:
                     let full_path = "https://upload.wikimedia.org/wikipedia/commons" + value + "";
