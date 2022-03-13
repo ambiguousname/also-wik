@@ -1,7 +1,8 @@
 class GameManager {
-    constructor(numImages, Reveal){
+    constructor(numImages, Reveal, settings){
         this.wikihow = new WikihowGetter();
         this.Reveal = Reveal;
+        this.settings = settings;
         this.title = "";
 
         const storageTitle = localStorage.getItem("title");
@@ -49,21 +50,45 @@ class GameManager {
         console.log("Added " + img_url);
     }
 
-    disableRight(){
-        $(".navigate-right").attr("class", "navigate-right disabled");
-    }
-
-    enableRight(){
-        $(".navigate-right").attr("class", "navigate-right enabled");
-    }
-
     createTimer(){
         $("<div class=\"indicator\"></div>").insertAfter(".controls-arrow");
-        $(".indicator").radialIndicator({});
+        let secondary = this.settings.getSetting("secondary-color");
+        let size = this.settings.getSetting("font-size");
+        this.timer = $(".indicator").radialIndicator({
+            barColor: secondary,
+            barWidth: size,
+            roundCorner: true,
+            initValue: 5000,
+            maxValue: 5000,
+            format: function(value){
+                return Math.floor(value/1000);
+            }
+        });
     }
 
     resetTimer(){
+        let time = 5000;
+        var timeInterval = setInterval(function(){
+            time -= 500;
+            this.timer.value(time);
+            if (time <= 0){
+                clearInterval(timeInterval);
+            }
+        }, 500);
+    }
 
+    showTimer(){
+        $(".navigate-right").attr("class", "navigate-right disabled");
+        if (this.timer === null){
+            this.createTimer();
+        }
+        this.resetTimer();
+        this.timer.show();
+    }
+
+    hideTimer(){
+        $(".navigate-right").attr("class", "navigate-right enabled");
+        this.timer.hide();
     }
 
     createSlideshow(){
@@ -73,12 +98,24 @@ class GameManager {
 
         var self = this;
         this.Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true, transition: "slide"}).then(function(){  
-            updateSlideColors();            
+            this.settings.refreshAll();
             let slideNum = localStorage.getItem("currSlide");
             if (slideNum !== null){
                 self.Reveal.slide(slideNum);
             }
         });
+    }
+
+    async present(code){
+        if (code.length > 0){
+            this.dataFromURL(code);
+            if (this.title !== ""){
+                $(".centered").hide();
+                this.createSlideshow();
+            }
+        } else {
+            this.createSlideshow();
+        }
     }
 
     dumpDataToURL(){

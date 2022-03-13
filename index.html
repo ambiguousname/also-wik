@@ -126,7 +126,7 @@
             settings.add(fontFamily);
             settings.add(imageSize);
 
-            let gm = new GameManager(imageSize.val, Reveal);
+            let gm = new GameManager(imageSize.val, Reveal, settings);
 
             // If we have parameters:
             if (window.location.href.includes("?")){
@@ -137,19 +137,9 @@
                 }
             }
             
-            async function present(){
-                // Just in case size changes:
-                updateSlideColors();
+            function present(){
                 let code = $("#presentcode").val();
-                if (code.length > 0){
-                    gm.dataFromURL(code);
-                    if (gm.title !== ""){
-                        $(".centered").hide();
-                        gm.createSlideshow();
-                    }
-                } else {
-                    gm.createSlideshow();
-                }
+                gm.present(code);
             }
 
             function resetSlideshow(){

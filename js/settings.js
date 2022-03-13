@@ -87,6 +87,16 @@ class Settings {
         }
         localStorage.setItem("acknowledged", "true");
     }
+
+    refreshAll(){
+        for (var [key, setting] in this.settings){
+            setting.update(setting.val);
+        }
+    }
+
+    getSetting(key){
+        return this.settings[key].val;
+    }
 }
 
 function hideAcknowledge(){
