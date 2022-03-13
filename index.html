@@ -32,12 +32,12 @@
             </div>
         </div>
         <div class="centered">
-            <div id="acknowledgement" style="display:none;">
+            <div id="acknowledgement" style="display:inline;">
                 <p>What follows is a bunch of random data gathered from WikiHow.</p>
                 <p>In a few seconds, you might see untold horrors sprouted from the wastes of human thought.</p>
                 <button type="button" class="btn btn-primary shadow-none" onclick="hideAcknowledge()">I am okay with this.</button>
             </div>
-            <div id="customize" style="display: inline;">
+            <div id="customize" style="display: none;">
                 <p>Primary Color <input type="text" class="color" id="primary-color" value="#fff"></p>
                 <p>Secondary Color <input type="text" class="color" id="secondary-color" value="#000"></p>
                 <p>Font Family <select class="form-select" name="font" id="font" oninput="updateFont()">
@@ -55,7 +55,7 @@
                 <button class="btn btn-primary shadow-none" onclick="present()">Present!</button>
                 </p>
             </div>
-            <div style="display:inline; width:50%;" class="progress">
+            <div style="display:none; width:50%;" class="progress">
                 <div id="loading" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;">0%</div>
             </div>
         </div>
@@ -84,14 +84,18 @@
             async function present(){
                 // Just in case size changes:
                 updateSlideColors();
-                $(".centered").fadeOut(500).then(function(){
+                $("#customize").fadeOut(500, function(){
                     $("#loading").show();
-                    while (!gm.isDone){
+                    var interval = setInterval(function(){
                         let percent = (gm.progress * 100) + "%";
                         $("#loading").css("width", percent);
                         $("#loading").text(percent);
-                    }
-                    gm.createSlideshow();
+                        if (gm.isDone){
+                            clearInterval(interval);
+                            $(".centered").hide();
+                            gm.createSlideshow();
+                        }
+                    }, 500);
                 });
 
                 //gm.getGameData();
