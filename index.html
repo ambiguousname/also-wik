@@ -101,11 +101,12 @@
 
             let fontSize = new NumberSetting($("#fontSize"), "font-size", 1, 50, {
                 "css": {
-                    "font-size": ["body", ".btn-primary", ".form-select", ".slides p", ".slides a"]
+                    "font-size": ["body", ".btn-primary", ".form-select"]
                 }
             }, "px");
 
-            fontSize.onupdate = function(value){
+            fontSize.onrefresh = function(value){
+                $(".slides p, .slides a").css("font-size", value + "px");
                 $(".slides").css("font-size", (value * 5) + "px");
             }
 
@@ -130,11 +131,7 @@
 
             // If we have parameters:
             if (window.location.href.includes("?")){
-                gm.dataFromURL(window.location.href.split("?")[1]);
-                if (gm.title !== ""){
-                    $(".centered").hide();
-                    gm.createSlideshow();
-                }
+                $("#presentcode").val(window.location.href.split("?")[1]);
             }
             
             function present(){
@@ -152,18 +149,28 @@
                 $(".color").colorpicker();
 
                 primary.onupdate = function(value){
-                    $("#primary-color").colorpicker('colorpicker').setValue(value);
+                    let colorpicker = $("#primary-color").colorpicker('colorpicker');
+                    if (colorpicker.getValue() !== value){
+                        colorpicker.setValue(value);
+                    }
                 }
 
                 secondary.onupdate = function(value){
-                    $("#secondary-color").colorpicker('colorpicker').setValue(value);
+                    let colorpicker = $("#secondary-color").colorpicker('colorpicker');
+                    if (colorpicker.getValue() !== value){
+                        colorpicker.setValue(value);
+                    }
                 }
                 
                 $("#primary-color").on("colorpickerChange", function(e){
-                    primary.updateVal(e.value);
+                    if (e.value !== primary.val){
+                        primary.updateVal(e.value);
+                    }
                 });
                 $("#secondary-color").on("colorpickerChange", function(e) {
-                    secondary.updateVal(e.value);
+                    if (e.value !== secondary.val){
+                        secondary.updateVal(e.value);
+                    }
                 });
             });
         </script>

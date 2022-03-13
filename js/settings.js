@@ -17,6 +17,7 @@ class Setting {
         }
 
         this.onupdate = function(){};
+        this.onrefresh = function(){};
     }
 
     updateValFromElement(){
@@ -32,6 +33,13 @@ class Setting {
 
     update(value){
         localStorage.setItem(this.name, value);
+        this.refreshChanges(value);
+        if (this.onupdate !== undefined){
+            this.onupdate(value);
+        }
+    }
+
+    refreshChanges(value){
         if (this.targets.css !== undefined){
             for (const [attr, list] of Object.entries(this.targets.css)) {
                 list.forEach(function(element){
@@ -46,8 +54,8 @@ class Setting {
                 });
             }
         }
-        if (this.onupdate !== undefined){
-            this.onupdate(value);
+        if (this.onrefresh !== undefined){
+            this.onrefresh(value);
         }
     }
 }
@@ -97,7 +105,7 @@ class Settings {
 
     refreshAll(){
         for (const [key, setting] of Object.entries(this.settings)){
-            setting.update(setting.val);
+            setting.refreshChanges(setting.val);
         }
     }
 

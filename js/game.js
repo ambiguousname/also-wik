@@ -50,7 +50,9 @@ class GameManager {
     }
 
     async setTitle(){
-        this.title = await this.wikihow.getArticleTitle();
+        if (this.title === ""){
+            this.title = await this.wikihow.getArticleTitle();
+        }
         localStorage.setItem("title", this.title);
         $("#title").text(this.title);
     }
@@ -119,7 +121,8 @@ class GameManager {
 
         var self = this;
         this.Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true, transition: "slide"}).then(function(){  
-            this.settings.refreshAll();
+            self.settings.refreshAll();
+            self.Reveal.sync();
             let slideNum = localStorage.getItem("currSlide");
             if (slideNum !== null){
                 self.Reveal.slide(slideNum);
@@ -141,7 +144,7 @@ class GameManager {
 
     dumpDataToURL(){
         var string = "title=" + this.title + "";
-        for (var i = 0; i < this.numImages; i++){
+        for (var i = 0; i < this.images.length; i++){
             var img_url = this.images[i];
             // Get rid of the beginnings and ends of the image we already know about:
             img_url = img_url.replace("https://www.wikihow.com/images/", "");
