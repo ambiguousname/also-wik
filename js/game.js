@@ -1,7 +1,7 @@
 class GameManager {
-    constructor(numImages, init){
+    constructor(numImages, Reveal){
         this.wikihow = new WikihowGetter();
-        this.init = init;
+        this.Reveal = Reveal;
         this.title = "";
 
         const storageTitle = localStorage.getItem("title");
@@ -9,70 +9,76 @@ class GameManager {
             this.title = storageTitle;
         }
         this.images = [];
-        this.numImages = numImages;
+        this.setNumImages(numImages);
         const storageImages = localStorage.getItem("images");
         if (storageImages !== null){
             this.images = JSON.parse(storageImages);
             this.numImages = this.images.length;
             this.createSlideshow();
         }
-        this.progress = 0;
-        this.isDone = false;
+
+        // If we're at the last slide, we want to stop storing the current slideshow to allow for new ones:
+        this.Reveal.on('slidechanged', function(){
+            if (Reveal.isLastSlide()){
+                localStorage.removeItem("title");
+                localStorage.removeItem("images");
+                localStorage.removeItem("currSlide");
+            } else {
+                localStorage.setItem("title", gm.title);
+                localStorage.setItem("images", JSON.stringify(gm.images));
+                localStorage.setItem("currSlide", Reveal.getState().indexh);
+            }
+        });
+    }
+
+    setNumImages(num){
+        this.numImages = num;
+        localStorage.setItem("numImages", num);
     }
 
     async setTitle(){
         this.title = await this.wikihow.getArticleTitle();
         localStorage.setItem("title", this.title);
+        $("#title").text(this.title);
     }
 
-    async getImagePatient(){
+    async addImage(){
         let img_url = await this.wikihow.getArticleImage();
         this.images.push(img_url);
-        console.log("Added " + img_url);
-        return new Promise(function(resolve){
-            setTimeout(function(){
-                resolve();
-            }, 3000);
-        });
-    }
-
-    async setImages(){
-        var self = this;
-        for (var i = 0; i < this.numImages; i++){
-            await self.getImagePatient();
-            this.progress += 1/(self.numImages + 1);
-        }
         localStorage.setItem("images", JSON.stringify(this.images));
+        console.log("Added " + img_url);
     }
 
-    async getGameData(){
-        this.isDone = false;
-        this.progress = 0;
-        await this.setTitle();
-        $("#title").text(this.title);
-        this.progress += 1/(this.numImages + 1);
-        var self = this;
-        // We've already made a request, so now we have to wait.
-        await new Promise(function(resolve){
-            setTimeout(function(){
-                self.setImages().then(resolve);
-            }, 3000);
-        });
-        this.isDone = true;
-        this.progress = 1;
+    disableRight(){
+        $(".navigate-right").attr("class", "navigate-right disabled");
+    }
+
+    enableRight(){
+        $(".navigate-right").attr("class", "navigate-right enabled");
+    }
+
+    createTimer(){
+        $("<div class=\"indicator\"></div>").insertAfter(".controls-arrow");
+        $(".indicator").radialIndicator({});
+    }
+
+    resetTimer(){
+
     }
 
     createSlideshow(){
-        var self = this;
-        $("#title").text(this.title);
-
-        for (var i = 0; i < this.numImages; i++){
-            $("<section><img src=\"" + self.images[i] + "\"></section>").insertAfter("#title-slide");
-        }
-
+        $(".centered").fadeOut(100);
+        this.setTitle();
         $("#codeText").text(this.dumpDataToURL());
-        
-        this.init();
+
+        var self = this;
+        this.Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true, transition: "slide"}).then(function(){  
+            updateSlideColors();            
+            let slideNum = localStorage.getItem("currSlide");
+            if (slideNum !== null){
+                self.Reveal.slide(slideNum);
+            }
+        });
     }
 
     dumpDataToURL(){

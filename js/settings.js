@@ -1,27 +1,92 @@
-function resetSettings(){
-    localStorage.clear();
-    $("#primary-color").val("#FFFFFF");
-    $("#secondary-color").val("#000000");
-    $("#font").val("Segoe UI");
-    $("#fontSize").val("16");
-    $("#imageSize").val("6");
-    $("#presentcode").val("");
-    changeSecondaryColor();
-    changePrimaryColor();
-    updateFont();
-    updateSize();
-    localStorage.setItem("acknowledged", "true");
+class Setting {
+    constructor(element, name, targets){
+        this.default = element.val();
+        this.name = name;
+        if (targets !== undefined){
+            this.targets = targets;
+        } else {
+            this.targets = {};
+        }
+        let storageValue = localStorage.getItem(this.name);
+        if (storageValue !== null){
+            this.val = storageValue;
+            this.update();
+        } else {
+            this.val = this.default;
+        }
+
+        this.onupdate = function(){};
+    }
+
+    updateValFromElement(){
+        this.val = element.val();
+        this.update(this.val);
+    }
+
+    updateVal(val){
+        this.val = val;
+        element.val(val);
+        this.update(val);
+    }
+
+    update(value){
+        localStorage.setItem(this.name, value);
+        for (var [attr, list] in this.targets.css) {
+            list.forEach(function(element){
+                $(element).css(attr, value);
+            });
+        }
+        for (var [attr, list] in this.targets.attr){
+            list.forEach(function(element){
+                $(element).attr(attr, value);
+            });
+        }
+        this.onupdate(value);
+    }
 }
 
-function updateSlideColors(){
-    let secondary = $("#secondary-color").val();
-    let primary = $("#primary-color").val();
-    let fontSize = parseInt($("#fontSize").val());
-    $(".controls-arrow").css("color", secondary);
-    $(".slides").css("color", secondary).css("font-size", (fontSize * 5) + "px");
-    $("a").css("color", secondary);
-    $(".slides p, .slides a").css("font-size", fontSize + "px");
-    $(".progress").css("color", secondary).css("background-color", primary);
+class NumberSetting extends Setting {
+    constructor(element, name, min, max, targets, suffix){
+        super(element, name, targets);
+        this.min = min;
+        this.max = max;
+
+        if (suffix !== undefined){
+            this.suffix = suffix;
+        } else {
+            this.suffix = "";
+        }
+    }
+
+    update(){
+        if (element.val() < this.min){
+            return this.updateVal(this.min);
+        }
+
+        if (element.val() > this.max){
+            return this.updateVal(this.max);
+        }
+
+        let val = this.val + this.suffix;
+        super(val);
+    }
+}
+
+class Settings {
+    constructor(){
+        this.settings = {};
+    }
+    add(setting){
+        this.settings[setting.name] = setting;
+    }
+
+    reset(){
+        localStorage.clear();
+        for (var [key, setting] in this.settings){
+            setting.updateVal(setting.default);
+        }
+        localStorage.setItem("acknowledged", "true");
+    }
 }
 
 function hideAcknowledge(){
@@ -29,42 +94,6 @@ function hideAcknowledge(){
     $("#acknowledgement").fadeOut(500, function(){
         $("#customize").fadeIn(500);
     });
-}
-
-function changeSecondaryColor(){
-    let val = $("#secondary-color").val();
-    $(".centered").css("color", val);
-    $(".btn-primary,#loading").css("background-color", val);
-    localStorage.setItem("secondary-color", val);
-}
-
-function changePrimaryColor(){
-    let val = $("#primary-color").val();
-    $("body,.progress").css("background-color", val);
-    $(".btn-primary,#loading").css("color", val);
-    localStorage.setItem("primary-color", val);
-}
-
-function updateFont(){
-    let font = $("#font").val();
-    $("body").css("font-family", font);
-    localStorage.setItem("font", font);
-}
-
-function updateSize(){
-    var size = parseInt($("#fontSize").val());
-
-    if (size > $("#fontSize").attr("max")){
-        size = $("#fontSize").attr("max");
-    }
-    if (size < $("#fontSize").attr("min")){
-        size = $("#fontSize").attr("min");
-    }
-    $("#fontSize").val(size);
-    $("body").css("font-size", size + "px");
-    $(".btn-primary").css("font-size", size + "px")
-    $(".form-select").css("font-size", size+"px");
-    localStorage.setItem("font-size", size);
 }
 
 function copyToClipboard(){

@@ -3,6 +3,7 @@
     <head>
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/wikigetter.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/radialIndicator/1.4.0/radialIndicator.js"></script>
         <link rel="stylesheet" href="dist/reveal.css">
         <link rel="stylesheet" href="dist/theme/white.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -25,6 +26,7 @@
                         <a href="https://revealjs.com" target="_blank">reveal.js</a>,
                         <a href="https://jquery.com/" target="_blank">Jquery</a>,
                         <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>,
+                        <a href="https://s-yadav.github.io/radialIndicator/">Radial Indicator</a>,
                         and <a href="https://itsjavi.com/bootstrap-colorpicker/index.html" target="_blank">Bootstrap-Colorpicker</a>
                     </p>
                     <p>Images and Text from <a href="https://wikihow.com/" target="_blank">wikiHow</a>.</p>
@@ -44,7 +46,7 @@
             <div id="customize" style="display: none;">
                 <p>Primary Color <input type="text" class="color" id="primary-color" value="#fff"></p>
                 <p>Secondary Color <input type="text" class="color" id="secondary-color" value="#000"></p>
-                <p>Font Family <select class="form-select" name="font" id="font" oninput="updateFont()">
+                <p>Font Family <select class="form-select" name="font" id="font" oninput="fontFamily.updateValFromElement()">
                     <option value="Segoe UI">Segoe UI</option>
                     <option value="Arial">Arial</option>
                     <option value="Brush Script MT">Brush Script MT</option>
@@ -58,15 +60,12 @@
                     <option value="Times New Roman">Times New Roman</option>
                     <option value="Trebuchet MS">Trebuchet MS</option>
                 </select></p>
-                <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=50 oninput="updateSize()">px</p>
-                <p>Number of Images <input type="number" id="imageSize" value="6" min=1 max=10 oninput="updateImageSize()"></p>
+                <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=50 oninput="fontSize.updateValFromElement()">px</p>
+                <p>Number of Images <input type="number" id="imageSize" value="6" min=1 max=10 oninput="imageSize.updateValFromElement()"></p>
                 <p>Code (Optional) <input type="text" value="" id="presentcode"/></p>
-                <button class="btn btn-primary shadow-none" onclick="resetSettings()">Reset to Default</button>
+                <button class="btn btn-primary shadow-none" onclick="settings.reset()">Reset to Default</button>
                 <button class="btn btn-primary shadow-none" onclick="present()">Present!</button>
                 </p>
-            </div>
-            <div style="display:none; width:50%;" class="progress">
-                <div id="loading" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%;">0%</div>
             </div>
         </div>
         <script src="js/settings.js"></script>
@@ -83,48 +82,51 @@
                 $("#customize").show();
             }
 
-            let primary = localStorage.getItem("primary-color");
-            if (primary !== null){
-                $("#primary-color").val(primary);
-                changePrimaryColor();
-            }
-            let secondary = localStorage.getItem("secondary-color");
-            if (secondary !== null){
-                $("#secondary-color").val(secondary);
-                changeSecondaryColor();
-            }
+            // Create Settings:
+            let settings = new Settings();
 
-            let imageSize = localStorage.getItem("image-size");
-
-            if (imageSize !== null){
-                $("#imageSize").val(imageSize);
-            } else {
-                imageSize = 6;
-            }
-
-            let gm = new GameManager(imageSize, function(){
-                $(".centered").hide();
-                Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true, transition: "slide"}).then(function(){  
-                    updateSlideColors();            
-                    let slideNum = localStorage.getItem("currSlide");
-                    if (slideNum !== null){
-                        Reveal.slide(slideNum);
-                    }
-                });
-
-                // If we're at the last slide, we want to stop storing the current slideshow to allow for new ones:
-                Reveal.on('slidechanged', function(event){
-                    if (Reveal.isLastSlide()){
-                        localStorage.removeItem("title");
-                        localStorage.removeItem("images");
-                        localStorage.removeItem("currSlide");
-                    } else {
-                        localStorage.setItem("title", gm.title);
-                        localStorage.setItem("images", JSON.stringify(gm.images));
-                        localStorage.setItem("currSlide", Reveal.getState().indexh);
-                    }
-                });
+            let primary = new Setting($("#primary-color"), "primary-color", {
+                css: {
+                    "background-color": ["body", ".progress"],
+                    "color": [".btn-primary"]
+                }
             });
+
+            let secondary = new Setting($("#secondary-color"), "secondary-color", {
+                css: {
+                    "background-color": [".btn-primary"],
+                    "color": [".centered", ".progress", ".controls-arrow", ".slides", "a"]
+                }
+            });
+
+            let fontSize = new NumberSetting($("#fontSize"), "font-size", 1, 50, {
+                "css": {
+                    "font-size": ["body", ".btn-primary", ".form-select", ".slides p", ".slides a"]
+                }
+            }, "px");
+
+            fontSize.onupdate = function(value){
+                $(".slides").css("font-size", (value * 5) + "px");
+            }
+
+            let fontFamily = new Setting($("#font"), "font-family", {
+                "css": {
+                    "font-family": ["body"]
+                }
+            });
+
+            let imageSize = new NumberSetting($("#imageSize"), "image-size", 1, 10);
+            imageSize.onupdate = function(value){
+                gm.setNumImages(value);
+            }
+
+            settings.add(primary);
+            settings.add(secondary);
+            settings.add(fontSize);
+            settings.add(fontFamily);
+            settings.add(imageSize);
+
+            let gm = new GameManager(imageSize.val, Reveal);
 
             // If we have parameters:
             if (window.location.href.includes("?")){
@@ -146,60 +148,21 @@
                         gm.createSlideshow();
                     }
                 } else {
-                    $("#customize").fadeOut(500, function(){
-                        $(".progress").show();
-                        var interval = setInterval(function(){
-                            let percent = (Math.floor(gm.progress * 100)) + "%";
-                            $("#loading").css("width", percent);
-                            $("#loading").text(percent);
-                            if (gm.isDone){
-                                clearInterval(interval);
-                                gm.createSlideshow();
-                            }
-                        }, 500);
-                    });
-                    gm.getGameData();
+                    gm.createSlideshow();
                 }
             }
 
             function resetSlideshow(){
                 Reveal.destroy();
                 $("#customize").show();
-                $(".progress").hide();
                 $(".centered").show();
             }
             
             $(function(){
                 $(".color").colorpicker();
-                $("#primary-color").on("colorpickerChange", changePrimaryColor);
-                $("#secondary-color").on("colorpickerChange", changeSecondaryColor);
-
-                let font = localStorage.getItem("font");
-                if (font !== null){
-                    $("#font").val(font);
-                    updateFont();
-                }
-
-                let fontSize = localStorage.getItem("font-size");
-                if (fontSize !== null){
-                    $("#fontSize").val(fontSize);
-                    updateSize();
-                }
+                $("#primary-color").on("colorpickerChange", primary.updateValFromElement);
+                $("#secondary-color").on("colorpickerChange", secondary.updateValFromElement);
             });
-
-            function updateImageSize(){
-                var size = parseInt($("#imageSize").val());
-
-                if (size > $("#imageSize").attr("max")){
-                    size = $("#imageSize").attr("max");
-                }
-                if (size < $("#imageSize").attr("min")){
-                    size = $("#imageSize").attr("min");
-                }
-                $("#imageSize").val(size);
-                gm.numImages = size;
-                localStorage.setItem("image-size", size);
-            }
         </script>
     </body>
 </html>
