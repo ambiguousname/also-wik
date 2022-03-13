@@ -14,10 +14,11 @@ function resetSettings(){
 function updateSlideColors(){
     let secondary = $("#secondary-color").val();
     let primary = $("#primary-color").val();
-    let fontSize = $("#fontSize").val();
+    let fontSize = parseInt($("#fontSize").val());
     $(".controls-arrow").css("color", secondary);
-    console.log(fontSize);
-    $(".slides").css("color", secondary).css("font-size", fontSize + "px");
+    $(".slides").css("color", secondary).css("font-size", (fontSize * 5) + "px");
+    $("a").css("color", secondary);
+    $(".slides p, .slides a").css("font-size", fontSize + "px");
     $(".progress").css("color", secondary).css("background-color", primary);
 }
 

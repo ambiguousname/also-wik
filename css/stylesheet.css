@@ -34,3 +34,7 @@ body {
 input[type=number]{
     max-width: 50%;
 }
+
+.slides a{
+    text-decoration: underline;
+}

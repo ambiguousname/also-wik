@@ -1,4 +1,4 @@
-Start/Options menu (Acknowledgement, Customize number of slides, wikis to pull from, Customize color, fonts, etc.)
+Start/Options menu (Customize number of slides, wikis to pull from, customize transitions?)
 Text transitions (maybe along with image slides?)
 Share button (To copy slideshow)
 Credits slide
