@@ -22,6 +22,10 @@ body {
     background-color: black;
 }
 
+.btn-primary:active{
+    background-color: black;
+}
+
 .form-select{
     max-width: 50%;
     display: inline;

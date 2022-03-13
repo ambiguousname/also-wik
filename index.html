@@ -75,6 +75,11 @@
         <script src="js/game.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js"></script>
         <script>
+            if (localStorage.getItem("acknowledged") !== null){
+                $("#acknowledgement").hide();
+                $("#customize").show();
+            }
+
             let primary = localStorage.getItem("primary-color");
             if (primary !== null){
                 $("#primary-color").val(primary);

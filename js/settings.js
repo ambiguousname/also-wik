@@ -10,6 +10,7 @@ function resetSettings(){
     changePrimaryColor();
     updateFont();
     updateSize();
+    localStorage.setItem("acknowledged", "true");
 }
 
 function updateSlideColors(){
@@ -24,6 +25,7 @@ function updateSlideColors(){
 }
 
 function hideAcknowledge(){
+    localStorage.setItem("acknowledged", "true");
     $("#acknowledgement").fadeOut(500, function(){
         $("#customize").fadeIn(500);
     });
