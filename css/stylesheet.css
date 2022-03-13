@@ -45,8 +45,8 @@ input[type=number]{
 
 .indicator {
     position: fixed;
-    bottom: -10px;
-    right: -10px;
+    bottom: -1.2vh;
+    right: -1vw;
 }
 
 .indicator canvas {
@@ -54,5 +54,5 @@ input[type=number]{
 }
 
 .navigate-left .controls-arrow {
-    right: 100%;
+    right: 120%;
 }

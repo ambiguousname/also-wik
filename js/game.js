@@ -37,8 +37,6 @@ class GameManager {
                 localStorage.setItem("currSlide", Reveal.getState().indexh);
                 localStorage.setItem("numImages", self.numImages);
 
-                console.log(self.images.length + " " + self.latestSlide);
-
                 if (self.images.length < self.numImages){
                     if (self.Reveal.getSlidePastCount() >= self.latestSlide && self.timerActive === true){
                         self.Reveal.slide(self.latestSlide);
@@ -83,11 +81,14 @@ class GameManager {
     createTimer(){
             
         let secondary = this.settings.getSetting("secondary-color");
+        let primary = this.settings.getSetting("primary-color");
         let size = this.settings.getSetting("font-size");
+        $("<div class=\"indicator\"></div>").insertAfter(".reveal");
         $(".indicator").radialIndicator({
             barColor: secondary,
-            barWidth: parseInt(size)/10,
-            fontSize: size,
+            barWidth: parseInt(size)/2,
+            barBgColor: primary,
+            fontSize: size * 2,
             initValue: 5000,
             maxValue: 5000,
             frameNum: 200,
@@ -205,5 +206,11 @@ class GameManager {
         } else {
             alert("Invalid presentation code: " + string);
         }
+    }
+
+    reset(){
+        this.images = [];
+        this.title = "";
+        $(".indicator").remove();
     }
 }

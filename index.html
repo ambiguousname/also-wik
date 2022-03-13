@@ -27,9 +27,9 @@
                         <a href="https://jquery.com/" target="_blank">Jquery</a>,
                         <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>,
                         <a href="https://s-yadav.github.io/radialIndicator/">Radial Indicator</a>,
-                        and <a href="https://itsjavi.com/bootstrap-colorpicker/index.html" target="_blank">Bootstrap-Colorpicker</a>
+                        and <a href="https://itsjavi.com/bootstrap-colorpicker/index.html" target="_blank">Bootstrap-Colorpicker</a>.
+                        Images and Text from <a href="https://wikihow.com/" target="_blank">wikiHow</a>.
                     </p>
-                    <p>Images and Text from <a href="https://wikihow.com/" target="_blank">wikiHow</a>.</p>
                     <p>Play this slideshow again with this code: <textarea id="codeText" style="height:1.5rem;"></textarea></p>
                     <p>
                         <button class="btn btn-primary shadow-none" onclick="copyToClipboard()">Copy code to clipboard</button>
@@ -37,7 +37,6 @@
                 </section>
             </div>
         </div>
-        <div class="indicator"></div>
         <div class="centered">
             <div id="acknowledgement" style="display:inline;">
                 <p>What follows is a bunch of random data gathered from wikiHow.</p>
@@ -61,7 +60,7 @@
                     <option value="Times New Roman">Times New Roman</option>
                     <option value="Trebuchet MS">Trebuchet MS</option>
                 </select></p>
-                <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=50 oninput="fontSize.updateValFromElement()">px</p>
+                <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=45 oninput="fontSize.updateValFromElement()">px</p>
                 <p>Number of Images <input type="number" id="imageSize" value="6" min=1 max=10 oninput="imageSize.updateValFromElement()"></p>
                 <p>Code (Optional) <input type="text" value="" id="presentcode"/></p>
                 <button class="btn btn-primary shadow-none" onclick="settings.reset()">Reset to Default</button>
@@ -100,7 +99,7 @@
                 }
             });
 
-            let fontSize = new NumberSetting($("#fontSize"), "font-size", 1, 50, {
+            let fontSize = new NumberSetting($("#fontSize"), "font-size", 1, 45, {
                 "css": {
                     "font-size": ["body", ".btn-primary", ".form-select"]
                 }
@@ -108,7 +107,7 @@
 
             fontSize.onrefresh = function(value){
                 $(".slides p, .slides a").css("font-size", value + "px");
-                $(".slides").css("font-size", (value * 5) + "px");
+                $(".slides").css("font-size", (value * 2) + "px");
             }
 
             let fontFamily = new Setting($("#font"), "font-family", {
@@ -144,6 +143,7 @@
                 localStorage.removeItem("images");
                 localStorage.removeItem("title");
                 localStorage.removeItem("numImages");
+                gm.reset();
                 $(".img-section").remove();
                 Reveal.destroy();
                 $("#customize").show();
