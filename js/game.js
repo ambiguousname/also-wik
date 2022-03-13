@@ -115,18 +115,21 @@ class GameManager {
     }
 
     createSlideshow(){
-        $(".centered").fadeOut(100);
-        this.setTitle();
-        $("#codeText").text(this.dumpDataToURL());
-
         var self = this;
-        this.Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true, transition: "slide"}).then(function(){  
-            self.settings.refreshAll();
-            self.Reveal.sync();
-            let slideNum = localStorage.getItem("currSlide");
-            if (slideNum !== null){
-                self.Reveal.slide(slideNum);
-            }
+        $(".reveal").hide();
+        $(".centered").fadeOut(500, function(){
+            self.setTitle();
+
+            $("#codeText").text(self.dumpDataToURL());
+            self.Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true, transition: "slide"}).then(function(){  
+                self.settings.refreshAll();
+                self.Reveal.sync();
+                let slideNum = localStorage.getItem("currSlide");
+                if (slideNum !== null){
+                    self.Reveal.slide(slideNum);
+                }
+            });
+            $(".reveal").fadeIn(500);
         });
     }
 
