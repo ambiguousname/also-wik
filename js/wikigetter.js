@@ -51,6 +51,8 @@ class WikihowGetter {
     let root = Object.values(text.query.pages)[0];
     // WikiHow is sometimes filled with random images not related to the articles, so if we don't get an image with "Step"
     // in the title, we can reasonably assume it is not an article image.
+    // And yes, this is the best solution I can think of. I don't know of a way to only filter for wikiHow articles.
+    // And the other images that this gets look definitively NOT like wikiHow images. And they scale weirdly.
     if (root.title.includes("Step")) {
       return root.imageinfo[0].url;
     } else {

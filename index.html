@@ -55,6 +55,7 @@
                     <option value="Trebuchet MS">Trebuchet MS</option>
                 </select></p>
                 <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=50 oninput="updateSize()">px</p>
+                <p>Existing Presentation Code: <input type="text" value="" id="presentcode"/></p>
                 <button class="btn btn-primary shadow-none" onclick="resetSettings()">Reset to Default</button>
                 <button class="btn btn-primary shadow-none" onclick="present()">Present!</button>
                 </p>
@@ -89,7 +90,6 @@
             // If we have parameters:
             if (window.location.href.includes("?")){
                 gm.dataFromURL(window.location.href.split("?")[1]);
-                console.log(gm.images);
                 if (gm.title !== "" && gm.images.length > 0){
                     $(".centered").hide();
                     gm.createSlideshow();
@@ -99,19 +99,27 @@
             async function present(){
                 // Just in case size changes:
                 updateSlideColors();
-                $("#customize").fadeOut(500, function(){
-                    $(".progress").show();
-                    var interval = setInterval(function(){
-                        let percent = (gm.progress * 100) + "%";
-                        $("#loading").css("width", percent);
-                        $("#loading").text(percent);
-                        if (gm.isDone){
-                            clearInterval(interval);
-                        }
-                    }, 500);
-                });
-
-                //gm.getGameData();
+                let code = $("#presentcode").val();
+                if (code.length > 0){
+                    gm.dataFromURL(code);
+                    if (gm.title !== "" && gm.images.length > 0){
+                        $(".centered").hide();
+                        gm.createSlideshow();
+                    }
+                } else {
+                    $("#customize").fadeOut(500, function(){
+                        $(".progress").show();
+                        var interval = setInterval(function(){
+                            let percent = (gm.progress * 100) + "%";
+                            $("#loading").css("width", percent);
+                            $("#loading").text(percent);
+                            if (gm.isDone){
+                                clearInterval(interval);
+                            }
+                        }, 500);
+                    });
+                    //gm.getGameData();
+                }
             }
             
             $(function(){

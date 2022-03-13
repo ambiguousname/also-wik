@@ -38,8 +38,8 @@ class GameManager {
     async setImages(){
         var self = this;
         for (var i = 0; i < this.numImages; i++){
-            await this.getImagePatient();
-            this.progress += 1/(this.numImages + 1);
+            await self.getImagePatient();
+            this.progress += 1/(self.numImages + 1);
         }
         localStorage.setItem("images", JSON.stringify(this.images));
     }
@@ -84,20 +84,23 @@ class GameManager {
 
     dataFromURL(string){
         let params = new URLSearchParams(string);
-        this.numImages = 0;
-        for (const [key, value] of params){
-            console.log(key);
-            if (key == "title"){
-                this.title = value;
-            } else if (key.match(/img\d+/g).length === 1){
-                let int = parseInt(key.substr(3));
-                // Placeholder:
-                let full_path = "https://upload.wikimedia.org/wikipedia/commons" + value + "";
-                this.images[int - 1] = full_path;
-                if (int > this.numImages){
-                    this.numImages = int;
+        if (params.values().length > 0){
+            this.numImages = 0;
+            for (const [key, value] of params){
+                if (key == "title"){
+                    this.title = value;
+                } else if (key.match(/img\d+/g).length === 1){
+                    let int = parseInt(key.substr(3));
+                    // Placeholder:
+                    let full_path = "https://upload.wikimedia.org/wikipedia/commons" + value + "";
+                    this.images[int - 1] = full_path;
+                    if (int > this.numImages){
+                        this.numImages = int;
+                    }
                 }
             }
+        } else {
+            alert("Invalid presentation code: " + string);
         }
     }
 }
