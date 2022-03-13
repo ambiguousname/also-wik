@@ -33,7 +33,7 @@
         </div>
         <div class="centered">
             <div id="acknowledgement" style="display:inline;">
-                <p>What follows is a bunch of random data gathered from WikiHow.</p>
+                <p>What follows is a bunch of random data gathered from wikiHow.</p>
                 <p>In a few seconds, you might see untold horrors sprouted from the wastes of human thought.</p>
                 <button type="button" class="btn btn-primary shadow-none" onclick="hideAcknowledge()">I am okay with this.</button>
             </div>
@@ -55,7 +55,7 @@
                     <option value="Trebuchet MS">Trebuchet MS</option>
                 </select></p>
                 <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=50 oninput="updateSize()">px</p>
-                <p>Existing Presentation Code: <input type="text" value="" id="presentcode"/></p>
+                <p>Code (Optional): <input type="text" value="" id="presentcode"/></p>
                 <button class="btn btn-primary shadow-none" onclick="resetSettings()">Reset to Default</button>
                 <button class="btn btn-primary shadow-none" onclick="present()">Present!</button>
                 </p>
@@ -90,7 +90,7 @@
             // If we have parameters:
             if (window.location.href.includes("?")){
                 gm.dataFromURL(window.location.href.split("?")[1]);
-                if (gm.title !== "" && gm.images.length > 0){
+                if (gm.title !== ""){
                     $(".centered").hide();
                     gm.createSlideshow();
                 }
@@ -102,7 +102,7 @@
                 let code = $("#presentcode").val();
                 if (code.length > 0){
                     gm.dataFromURL(code);
-                    if (gm.title !== "" && gm.images.length > 0){
+                    if (gm.title !== ""){
                         $(".centered").hide();
                         gm.createSlideshow();
                     }

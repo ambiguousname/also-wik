@@ -84,7 +84,7 @@ class GameManager {
 
     dataFromURL(string){
         let params = new URLSearchParams(string);
-        if (params.values().length > 0){
+        if (params.has("title") && string.length > 0){
             this.numImages = 0;
             for (const [key, value] of params){
                 if (key == "title"){
