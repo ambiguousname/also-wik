@@ -1,5 +1,6 @@
 class Setting {
     constructor(element, name, targets){
+        this.element = element;
         this.default = element.val();
         this.name = name;
         if (targets !== undefined){
@@ -19,29 +20,35 @@ class Setting {
     }
 
     updateValFromElement(){
-        this.val = element.val();
+        this.val = this.element.val();
         this.update(this.val);
     }
 
     updateVal(val){
         this.val = val;
-        element.val(val);
+        this.element.val(val);
         this.update(val);
     }
 
     update(value){
         localStorage.setItem(this.name, value);
-        for (var [attr, list] in this.targets.css) {
-            list.forEach(function(element){
-                $(element).css(attr, value);
-            });
+        if (this.targets.css !== undefined){
+            for (const [attr, list] of Object.entries(this.targets.css)) {
+                list.forEach(function(element){
+                    $(element).css(attr, value);
+                });
+            }
         }
-        for (var [attr, list] in this.targets.attr){
-            list.forEach(function(element){
-                $(element).attr(attr, value);
-            });
+        if (this.targets.attr !== undefined){
+            for (const [attr, list] of Object.entries(this.targets.attr)){
+                list.forEach(function(element){
+                    $(element).attr(attr, value);
+                });
+            }
         }
-        this.onupdate(value);
+        if (this.onupdate !== undefined){
+            this.onupdate(value);
+        }
     }
 }
 
@@ -59,16 +66,16 @@ class NumberSetting extends Setting {
     }
 
     update(){
-        if (element.val() < this.min){
+        if (this.element.val() < this.min){
             return this.updateVal(this.min);
         }
 
-        if (element.val() > this.max){
+        if (this.element.val() > this.max){
             return this.updateVal(this.max);
         }
 
         let val = this.val + this.suffix;
-        super(val);
+        super.update(val);
     }
 }
 
@@ -82,14 +89,14 @@ class Settings {
 
     reset(){
         localStorage.clear();
-        for (var [key, setting] in this.settings){
+        for (const [key, setting] of Object.entries(this.settings)){
             setting.updateVal(setting.default);
         }
         localStorage.setItem("acknowledged", "true");
     }
 
     refreshAll(){
-        for (var [key, setting] in this.settings){
+        for (const [key, setting] of Object.entries(this.settings)){
             setting.update(setting.val);
         }
     }

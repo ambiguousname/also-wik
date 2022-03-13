@@ -42,7 +42,9 @@ class WikihowGetter {
     const title_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&generator=random&grnnamespace=0";
     let t = await this.xmlLoadHTML(title_url);
     let text = JSON.parse(t);
-    return Object.values(text.query.pages)[0].title;
+    //return Object.values(text.query.pages)[0].title;
+    // For testing, for now:
+    return "Test Title";
   }
 
   async getArticleImage(){
@@ -55,7 +57,7 @@ class WikihowGetter {
     // in the title, we can reasonably assume it is not an article image.
     // And yes, this is the best solution I can think of. I don't know of a way to only filter for wikiHow articles.
     // And the other images that this gets look definitively NOT like wikiHow images. And they scale weirdly.
-    if (root.title.includes("Step")) {
+    /*if (root.title.includes("Step")) {
       return root.imageinfo[0].url;
     } else {
       var self = this;
@@ -65,6 +67,8 @@ class WikihowGetter {
         }, 3000);
       });
       return url;
-    }
+    }*/
+    // For testing, for now:
+    return "https://ambiguousname.github.io/assets/images/tree.png";
   }
 }

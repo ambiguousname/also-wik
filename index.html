@@ -44,8 +44,8 @@
                 <button type="button" class="btn btn-primary shadow-none" onclick="hideAcknowledge()">I am okay with this.</button>
             </div>
             <div id="customize" style="display: none;">
-                <p>Primary Color <input type="text" class="color" id="primary-color" value="#fff"></p>
-                <p>Secondary Color <input type="text" class="color" id="secondary-color" value="#000"></p>
+                <p>Primary Color <input type="text" class="color" id="primary-color" value="#FFFFFF"></p>
+                <p>Secondary Color <input type="text" class="color" id="secondary-color" value="#000000"></p>
                 <p>Font Family <select class="form-select" name="font" id="font" oninput="fontFamily.updateValFromElement()">
                     <option value="Segoe UI">Segoe UI</option>
                     <option value="Arial">Arial</option>
@@ -150,8 +150,21 @@
             
             $(function(){
                 $(".color").colorpicker();
-                $("#primary-color").on("colorpickerChange", primary.updateValFromElement);
-                $("#secondary-color").on("colorpickerChange", secondary.updateValFromElement);
+
+                primary.onupdate = function(value){
+                    $("#primary-color").colorpicker('colorpicker').setValue(value);
+                }
+
+                secondary.onupdate = function(value){
+                    $("#secondary-color").colorpicker('colorpicker').setValue(value);
+                }
+                
+                $("#primary-color").on("colorpickerChange", function(e){
+                    primary.updateVal(e.value);
+                });
+                $("#secondary-color").on("colorpickerChange", function(e) {
+                    secondary.updateVal(e.value);
+                });
             });
         </script>
     </body>
