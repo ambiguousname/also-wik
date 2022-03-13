@@ -42,3 +42,17 @@ input[type=number]{
 .slides a{
     text-decoration: underline;
 }
+
+.indicator {
+    position: fixed;
+    bottom: -10px;
+    right: -10px;
+}
+
+.indicator canvas {
+    padding: 20%;
+}
+
+.navigate-left .controls-arrow {
+    right: 100%;
+}

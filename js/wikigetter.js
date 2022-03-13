@@ -40,8 +40,8 @@ class WikihowGetter {
     // Based on https://www.mediawiki.org/wiki/API:Query
     // grnnamespace=0 tells us to get a random article name.
     const title_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&generator=random&grnnamespace=0";
-    let t = await this.xmlLoadHTML(title_url);
-    let text = JSON.parse(t);
+    /*let t = await this.xmlLoadHTML(title_url);
+    let text = JSON.parse(t);*/
     //return Object.values(text.query.pages)[0].title;
     // For testing, for now:
     return "Test Title";
@@ -50,9 +50,9 @@ class WikihowGetter {
   async getArticleImage(){
     // We get imageinfo, and we can customize the info we get from iiprop.
     const img_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&generator=random&grnnamespace=6&prop=imageinfo&iiprop=url";
-    let t = await this.xmlLoadHTML(img_url);
-    let text = JSON.parse(t);
-    let root = Object.values(text.query.pages)[0];
+    /*let t = await this.xmlLoadHTML(img_url);
+    /let text = JSON.parse(t);
+    let root = Object.values(text.query.pages)[0];*/
     // WikiHow is sometimes filled with random images not related to the articles, so if we don't get an image with "Step"
     // in the title, we can reasonably assume it is not an article image.
     // And yes, this is the best solution I can think of. I don't know of a way to only filter for wikiHow articles.

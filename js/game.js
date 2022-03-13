@@ -12,13 +12,15 @@ class GameManager {
         this.images = [];
         this.setNumImages(numImages);
         const storageImages = localStorage.getItem("images");
-        if (storageImages !== null){
+        const num = localStorage.getItem("numImages");
+        if (storageImages !== null && num !== null){
             this.images = JSON.parse(storageImages);
-            this.numImages = this.images.length;
+            this.numImages = num;
             this.createSlideshow();
         }
 
         this.timerActive = false;
+        this.latestSlide = 0;
 
         var self = this;
 
@@ -28,12 +30,31 @@ class GameManager {
                 localStorage.removeItem("title");
                 localStorage.removeItem("images");
                 localStorage.removeItem("currSlide");
+                localStorage.removeItem("numImages");
             } else {
-                localStorage.setItem("title", gm.title);
-                localStorage.setItem("images", JSON.stringify(gm.images));
+                localStorage.setItem("title", self.title);
+                localStorage.setItem("images", JSON.stringify(self.images));
                 localStorage.setItem("currSlide", Reveal.getState().indexh);
-                let totalImagesPassed = self.Reveal.getSlidePastCount() - 1;
-                console.log(totalImagesPassed);
+                localStorage.setItem("numImages", self.numImages);
+
+                console.log(self.images.length + " " + self.latestSlide);
+
+                if (self.images.length < self.numImages){
+                    if (self.Reveal.getSlidePastCount() >= self.latestSlide && self.timerActive === true){
+                        self.Reveal.slide(self.latestSlide);
+                    } else if (self.timerActive === false && self.Reveal.getSlidePastCount() === self.latestSlide){
+                        self.resetTimer();
+                        self.showTimer();
+                    }
+                    
+                    if (self.timerActive === true){
+                        if (self.Reveal.getSlidePastCount() >= self.latestSlide){
+                            self.showTimer();
+                        } else {
+                            self.hideTimer();
+                        }
+                    }
+                }
             }
         });
     }
@@ -55,8 +76,7 @@ class GameManager {
         let img_url = await this.wikihow.getArticleImage();
         this.images.push(img_url);
         localStorage.setItem("images", JSON.stringify(this.images));
-        $("<section><img src=\"" + img_url + "\"/></section>").insertBefore("#end");
-        console.log("Added " + img_url);
+        $("#img" + (this.images.length - 1)).append("<img src=\"" + img_url + "\"/>");
         this.Reveal.sync();
     }
 
@@ -64,14 +84,13 @@ class GameManager {
             
         let secondary = this.settings.getSetting("secondary-color");
         let size = this.settings.getSetting("font-size");
-        console.log(secondary);
-        console.log(size);
         $(".indicator").radialIndicator({
             barColor: secondary,
             barWidth: parseInt(size)/10,
             fontSize: size,
             initValue: 5000,
             maxValue: 5000,
+            frameNum: 200,
             format: function(value){
                 return Math.floor(value/1000);
             }
@@ -81,35 +100,43 @@ class GameManager {
     resetTimer(){
         let time = 5000;
         this.timerActive = true;
-        let Reveal = this.Reveal;
+        var self = this;
+        $(".indicator").data("radialIndicator").value(5000);
         var timeInterval = setInterval(function(){
             time -= 500;
             $(".indicator").data("radialIndicator").animate(time);
             // 3 seconds have passed:
-            if (time === 2000 && Reveal.getSlidePastCount() - 1 >= this.numImages){
-                this.addImage();
+            if (time === 2000 && self.images.length < self.numImages){
+                self.addImage();
             }
-            if (time <= 0){
+            if (time <= -500){
+                self.hideTimer();
+                self.latestSlide += 1;
                 clearInterval(timeInterval);
-                this.timerActive = false;
-                this.hideTimer();
+                self.timerActive = false;
             }
         }, 500);
     }
 
     showTimer(){
-        $(".navigate-right").attr("disabled", "disabled");
         $(".indicator").show();
+        $(".navigate-right").hide();
     }
 
     hideTimer(){
-        $(".navigate-right").attr("disabled", "");
         $(".indicator").hide();
+        $(".navigate-right").show();
     }
 
     createSlideshow(){
         var self = this;
         $(".reveal").hide();
+        for (var i = 0; i < this.numImages; i++){
+            $("<section id=\"img" + i + "\" class=\"img-section\"></section>").insertBefore("#end");
+            if (self.images[i] !== undefined){
+                $("#img" + i).append("<img src=\"" + self.images[i] + "\"/>");
+            }
+        }
         $(".centered").fadeOut(500, function(){
             self.setTitle();
 
@@ -119,9 +146,12 @@ class GameManager {
                 self.Reveal.sync();
                 let slideNum = localStorage.getItem("currSlide");
                 if (slideNum !== null){
-                    self.Reveal.slide(slideNum);
+                    self.Reveal.slide(parseInt(slideNum));
+                    self.latestSlide = parseInt(slideNum);
+                } else {
+                    self.latestSlide = 0;
                 }
-                if (self.Reveal.getSlidePastCount() - 1 < self.numImages){
+                if (self.images.length < self.numImages){
                     self.createTimer();
                     self.showTimer();
                     self.resetTimer();

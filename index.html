@@ -18,7 +18,7 @@
                 <div id="title" >Test</div>
                 <p>Click on the bottom left, scroll your mousewheel, or swipe to present.</p>
                 </section>
-                <section id="end" data-visibility="hidden">
+                <section id="end">
                     <div>The End</div>
                     <p>Code by <a href="https://ambiguousname.github.io/" target="_blank">ambiguousname</a></p>
                     <p>
@@ -36,8 +36,8 @@
                         <button class="btn btn-primary shadow-none" onclick="resetSlideshow()">Go Again?</button></p>
                 </section>
             </div>
-            <div class="indicator"></div>
         </div>
+        <div class="indicator"></div>
         <div class="centered">
             <div id="acknowledgement" style="display:inline;">
                 <p>What follows is a bunch of random data gathered from wikiHow.</p>
@@ -141,6 +141,10 @@
             }
 
             function resetSlideshow(){
+                localStorage.removeItem("images");
+                localStorage.removeItem("title");
+                localStorage.removeItem("numImages");
+                $(".img-section").remove();
                 Reveal.destroy();
                 $("#customize").show();
                 $(".centered").show();

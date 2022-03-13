@@ -10,8 +10,7 @@ class Setting {
         }
         let storageValue = localStorage.getItem(this.name);
         if (storageValue !== undefined && storageValue !== null){
-            this.val = storageValue;
-            this.update();
+            this.updateVal(storageValue);
         } else {
             this.val = this.default;
         }
@@ -73,6 +72,27 @@ class NumberSetting extends Setting {
         }
     }
 
+    refreshChanges(value){
+        var self = this;
+        if (this.targets.css !== undefined){
+            for (const [attr, list] of Object.entries(this.targets.css)) {
+                list.forEach(function(element){
+                    $(element).css(attr, value + self.suffix);
+                });
+            }
+        }
+        if (this.targets.attr !== undefined){
+            for (const [attr, list] of Object.entries(this.targets.attr)){
+                list.forEach(function(element){
+                    $(element).attr(attr, value + self.suffix);
+                });
+            }
+        }
+        if (this.onrefresh !== undefined){
+            this.onrefresh(value);
+        }
+    }
+
     update(){
         if (this.element.val() < this.min){
             return this.updateVal(this.min);
@@ -82,7 +102,7 @@ class NumberSetting extends Setting {
             return this.updateVal(this.max);
         }
 
-        let val = this.val + this.suffix;
+        let val = this.element.val();
         super.update(val);
     }
 }
