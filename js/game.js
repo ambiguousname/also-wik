@@ -32,14 +32,8 @@ class GameManager {
                 localStorage.setItem("title", gm.title);
                 localStorage.setItem("images", JSON.stringify(gm.images));
                 localStorage.setItem("currSlide", Reveal.getState().indexh);
-                if (Reveal.getTotalSlides() - Reveal.getSlidePastCount() === 1 && Reveal.getSlidePastCount() - 1 < self.num){
-                    self.showTimer();
-                    if (!self.timerActive){
-                        self.resetTimer();
-                    }
-                } else if (self.timerActive){
-                    self.hideTimer();
-                }
+                let totalImagesPassed = self.Reveal.getSlidePastCount() - 1;
+                console.log(totalImagesPassed);
             }
         });
     }
@@ -67,13 +61,15 @@ class GameManager {
     }
 
     createTimer(){
-        $("<div class=\"indicator\"></div>").insertAfter(".controls-arrow");
+            
         let secondary = this.settings.getSetting("secondary-color");
         let size = this.settings.getSetting("font-size");
-        this.timer = $(".indicator").radialIndicator({
+        console.log(secondary);
+        console.log(size);
+        $(".indicator").radialIndicator({
             barColor: secondary,
-            barWidth: size,
-            roundCorner: true,
+            barWidth: parseInt(size)/10,
+            fontSize: size,
             initValue: 5000,
             maxValue: 5000,
             format: function(value){
@@ -88,7 +84,7 @@ class GameManager {
         let Reveal = this.Reveal;
         var timeInterval = setInterval(function(){
             time -= 500;
-            this.timer.value(time);
+            $(".indicator").data("radialIndicator").animate(time);
             // 3 seconds have passed:
             if (time === 2000 && Reveal.getSlidePastCount() - 1 >= this.numImages){
                 this.addImage();
@@ -102,16 +98,13 @@ class GameManager {
     }
 
     showTimer(){
-        $(".navigate-right").attr("class", "navigate-right disabled");
-        if (this.timer === null){
-            this.createTimer();
-        }
-        this.timer.show();
+        $(".navigate-right").attr("disabled", "disabled");
+        $(".indicator").show();
     }
 
     hideTimer(){
-        $(".navigate-right").attr("class", "navigate-right enabled");
-        this.timer.hide();
+        $(".navigate-right").attr("disabled", "");
+        $(".indicator").hide();
     }
 
     createSlideshow(){
@@ -127,6 +120,11 @@ class GameManager {
                 let slideNum = localStorage.getItem("currSlide");
                 if (slideNum !== null){
                     self.Reveal.slide(slideNum);
+                }
+                if (self.Reveal.getSlidePastCount() - 1 < self.numImages){
+                    self.createTimer();
+                    self.showTimer();
+                    self.resetTimer();
                 }
             });
             $(".reveal").fadeIn(500);
