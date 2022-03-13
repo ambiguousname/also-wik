@@ -13,7 +13,7 @@
     <body>
         <div class="reveal">
             <div class="slides">
-                <section>
+                <section id ="title-slide">
                 <div id="title" >Test</div>
                 <p>Click on the bottom left or swipe to present.</p>
                 </section>
@@ -76,10 +76,21 @@
                 changeSecondaryColor();
             }
             let gm = new GameManager(6, function(){
+                $(".centered").hide();
                 Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true}).then(function(){  
                     updateSlideColors();
                 });
             });
+
+            // If we have parameters:
+            if (window.location.href.includes("?")){
+                gm.dataFromURL(window.location.href.split("?")[1]);
+                console.log(gm.images);
+                if (gm.title !== "" && gm.images.length > 0){
+                    $(".centered").hide();
+                    gm.createSlideshow();
+                }
+            }
             
             async function present(){
                 // Just in case size changes:
@@ -92,8 +103,6 @@
                         $("#loading").text(percent);
                         if (gm.isDone){
                             clearInterval(interval);
-                            $(".centered").hide();
-                            gm.createSlideshow();
                         }
                     }, 500);
                 });

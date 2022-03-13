@@ -54,7 +54,11 @@ class WikihowGetter {
     if (root.title.includes("Step")) {
       return root.imageinfo[0].url;
     } else {
-      let url = await this.getArticleImage();
+      let url = await new Promise(function(resolve){
+        setTimeout(function(){
+          this.getArticleImage().then(resolve);
+        }, 3000);
+      });
       return url;
     }
   }

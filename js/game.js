@@ -3,6 +3,7 @@ class GameManager {
         this.wikihow = new WikihowGetter();
         this.init = init;
         this.title = "";
+
         const storageTitle = localStorage.getItem("title");
         if (storageTitle !== null){
             this.title = storageTitle;
@@ -24,7 +25,7 @@ class GameManager {
         localStorage.setItem("title", this.title);
     }
 
-    async getImagePatient(index){
+    async getImagePatient(){
         let img_url = await this.wikihow.getArticleImage();
         this.images.push(img_url);
         return new Promise(function(resolve){
@@ -35,6 +36,7 @@ class GameManager {
     }
 
     async setImages(){
+        var self = this;
         for (var i = 0; i < this.numImages; i++){
             await this.getImagePatient();
             this.progress += 1/(this.numImages + 1);
@@ -46,6 +48,7 @@ class GameManager {
         this.isDone = false;
         this.progress = 0;
         await this.setTitle();
+        $("#title").text(this.title);
         this.progress += 1/(this.numImages + 1);
         // We've already made a request, so now we have to wait.
         await new Promise(function(resolve){
@@ -58,15 +61,43 @@ class GameManager {
     }
 
     createSlideshow(){
+        var self = this;
         $("#title").text(this.title);
 
-        let self = this;
         for (var i = 0; i < this.numImages; i++){
-            if (typeof self.images[i] !== undefined){
-                $("<section><img src=\"" + self.images[i] + "\"></section>").insertAfter("#title");
+            $("<section><img src=\"" + self.images[i] + "\"></section>").insertAfter("#title-slide");
+        }
+        
+        this.init();
+    }
+
+    dumpDataToURL(){
+        var string = "?title=" + this.title + "";
+        for (var i = 0; i < this.numImages; i++){
+            var img_url = this.images[i];
+            // Get rid of the beginnings and ends of the image we already know about:
+            img_url = img_url.replace(/a/g, "");
+            string += "&img" + i + "=" + img_url;
+        }
+        return string;
+    }
+
+    dataFromURL(string){
+        let params = new URLSearchParams(string);
+        this.numImages = 0;
+        for (const [key, value] of params){
+            console.log(key);
+            if (key == "title"){
+                this.title = value;
+            } else if (key.match(/img\d+/g).length === 1){
+                let int = parseInt(key.substr(3));
+                // Placeholder:
+                let full_path = "https://upload.wikimedia.org/wikipedia/commons" + value + "";
+                this.images[int - 1] = full_path;
+                if (int > this.numImages){
+                    this.numImages = int;
+                }
             }
         }
-
-        this.init();
     }
 }
