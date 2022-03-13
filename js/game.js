@@ -28,6 +28,7 @@ class GameManager {
     async getImagePatient(){
         let img_url = await this.wikihow.getArticleImage();
         this.images.push(img_url);
+        console.log("Added " + img_url);
         return new Promise(function(resolve){
             setTimeout(function(){
                 resolve();
@@ -50,10 +51,11 @@ class GameManager {
         await this.setTitle();
         $("#title").text(this.title);
         this.progress += 1/(this.numImages + 1);
+        var self = this;
         // We've already made a request, so now we have to wait.
         await new Promise(function(resolve){
             setTimeout(function(){
-                this.setImages().then(resolve);
+                self.setImages().then(resolve);
             }, 3000);
         });
         this.isDone = true;

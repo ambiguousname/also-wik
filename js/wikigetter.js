@@ -4,15 +4,17 @@ class WikihowGetter {
   }
 
   xmlLoadHTML(url){
+    console.log("Loading " + url + " ...");
+    var self = this;
     if (this.canAccess){
       this.canAccess = false;
       setTimeout(function(){
-        this.canAccess = true;
+        self.canAccess = true;
       }, 3000);
     } else {
       console.error("Too many requests to wikiHow! Staggering...");
       setTimeout(function(){
-        xmlLoadHTML(url);
+        self.xmlLoadHTML(url);
       }, 3000);
       return;
     }
@@ -56,9 +58,10 @@ class WikihowGetter {
     if (root.title.includes("Step")) {
       return root.imageinfo[0].url;
     } else {
+      var self = this;
       let url = await new Promise(function(resolve){
         setTimeout(function(){
-          this.getArticleImage().then(resolve);
+          self.getArticleImage().then(resolve);
         }, 3000);
       });
       return url;

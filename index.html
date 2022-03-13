@@ -137,7 +137,7 @@
                     $("#customize").fadeOut(500, function(){
                         $(".progress").show();
                         var interval = setInterval(function(){
-                            let percent = (gm.progress * 100) + "%";
+                            let percent = (Math.floor(gm.progress * 100)) + "%";
                             $("#loading").css("width", percent);
                             $("#loading").text(percent);
                             if (gm.isDone){
@@ -145,7 +145,7 @@
                             }
                         }, 500);
                     });
-                    //gm.getGameData();
+                    gm.getGameData();
                 }
             }
 
