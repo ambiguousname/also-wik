@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="wikigetter.js"></script>
+        <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="js/wikigetter.js"></script>
         <link rel="stylesheet" href="dist/reveal.css">
         <link rel="stylesheet" href="dist/theme/white.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/stylesheet.css">       
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
         <div class="reveal">
@@ -12,12 +17,94 @@
                 <section>The End</section>
             </div>
         </div>
+        <div class="centered">
+            <div id="acknowledgement" style="display:none;">
+                <p>What follows is a bunch of random data gathered from WikiHow.</p>
+                <p>In a few seconds, you might see untold horrors sprouted from the wastes of human thought.</p>
+                <button type="button" class="btn btn-primary shadow-none" onclick="hideAcknowledge()">I am okay with this.</button>
+            </div>
+            <div id="customize" style="display: inline;">
+                <p>Primary Color <input type="text" class="color" id="primary-color" value="#fff"></p>
+                <p>Secondary Color <input type="text" class="color" id="secondary-color" value="#000"></p>
+                <p>Font Family <select class="form-select" name="font" id="font" oninput="updateFont()">
+                    <option value="Segoe UI">Segoe UI</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Comic Sans MS">Comic Sans MS</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Helvetica">Helvetica</option>
+                    <option value="Papyrus">Papyrus</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                </select></p>
+                <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=70 oninput="updateSize()">px</p>
+                <p><button class="btn btn-primary shadow-none" onclick="generateTitle()" id="titlePreview">Randomize Title</button>
+                    <button class="btn btn-primary shadow-none" onclick="hideTitle()">Hide Title Preview</button></p>
+
+                <p>
+                <button class="btn btn-primary shadow-none" onclick="resetSettings()">Reset to Default</button>
+                <button class="btn btn-primary shadow-none" onclick="present()">Present!</button>
+                </p>
+            </div>
+        </div>
+        <script src="js/settings.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <script src="dist/reveal.js"></script>
-        <script src="game.js"></script>
+        <script src="js/game.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js"></script>
         <script>
-            new GameManager(function(){
-                Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", slideNumber: true, mouseWheel: true});
+            let primary = localStorage.getItem("primary-color");
+            if (primary !== null){
+                $("#primary-color").val(primary);
+                changePrimaryColor();
+            }
+            let secondary = localStorage.getItem("secondary-color");
+            if (secondary !== null){
+                $("#secondary-color").val(secondary);
+                changeSecondaryColor();
+            }
+            let gm = new GameManager(6, function(){
+                Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true}).then(function(){  
+                    updateSlideColors();
+                });
             });
+            
+            function present(){
+                $(".centered").hide();
+                Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true}).then(function(){  
+                    updateSlideColors();
+                });
+            }
+            
+            $(function(){
+                $(".color").colorpicker();
+                $("#primary-color").on("colorpickerChange", changePrimaryColor);
+                $("#secondary-color").on("colorpickerChange", changeSecondaryColor);
+
+                let font = localStorage.getItem("font");
+                if (font !== null){
+                    $("#font").val(font);
+                    updateFont();
+                }
+
+                let fontSize = localStorage.getItem("font-size");
+                if (fontSize !== null){
+                    $("#fontSize").val(fontSize);
+                    updateSize();
+                }
+            });
+
+            function generateTitle(){
+                alert("generateTitle attempts to use xhr, uncomment once testing is done.");
+                /*gm.setTitle().then(function(title){
+                    $("#titlePreview").text(title);
+                });*/
+                $("#titlePreview").text("Test");
+            }
+
+            function hideTitle(){
+                $("#titlePreview").text("Preview Presentation Title");
+                gm.title = "";
+            }
         </script>
     </body>
 </html>

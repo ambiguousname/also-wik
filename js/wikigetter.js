@@ -1,9 +1,15 @@
 class WikihowGetter {
   xmlLoadHTML(url){
     let xml = new XMLHttpRequest();
-    let promise = new Promise(function(resolve){
-      xml.addEventListener("loadend", function(){
-        resolve(xml.responseText);
+    let promise = new Promise(function(resolve, reject){
+      xml.addEventListener("loadend", function(){ 
+        if (xml.status === 200){
+          resolve(xml.responseText);
+        } else {
+          console.log(xml);
+          alert("Error getting wikiHow data. Your computer has probably requested data from wikiHow too many times. See the console for more info, please wait and try again later.");
+          reject(null);
+        }
       });
     });
     xml.open("GET", url);

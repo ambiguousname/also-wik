@@ -1,0 +1,36 @@
+.centered {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    left:0;
+    right:0;
+    min-height: 100vh;
+}
+
+body {
+    transition-duration: 0.1s;
+}
+
+.btn-primary {
+    background-color: black;
+    color: white;
+    border:none;
+}
+
+.btn-primary:hover{
+    background-color: black;
+}
+
+.form-select{
+    max-width: 50%;
+    display: inline;
+}
+
+.color{
+    max-width: 50%;
+}
+
+input[type=number]{
+    max-width: 50%;
+}
