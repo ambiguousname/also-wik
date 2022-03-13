@@ -85,21 +85,21 @@
             // Create Settings:
             let settings = new Settings();
 
-            let primary = new Setting($("#primary-color"), "primary-color", {
+            let primary = new Setting("#FFFFFF", $("#primary-color"), "primary-color", {
                 css: {
                     "background-color": ["body", ".progress"],
                     "color": [".btn-primary"]
                 }
             });
 
-            let secondary = new Setting($("#secondary-color"), "secondary-color", {
+            let secondary = new Setting("#000000", $("#secondary-color"), "secondary-color", {
                 css: {
                     "background-color": [".btn-primary"],
                     "color": [".centered", ".progress", ".controls-arrow", ".slides", "a"]
                 }
             });
 
-            let fontSize = new NumberSetting($("#fontSize"), "font-size", 1, 45, {
+            let fontSize = new NumberSetting("16", $("#fontSize"), "font-size", 1, 45, {
                 "css": {
                     "font-size": ["body", ".btn-primary", ".form-select"]
                 }
@@ -110,13 +110,13 @@
                 $(".slides").css("font-size", (value * 2) + "px");
             }
 
-            let fontFamily = new Setting($("#font"), "font-family", {
+            let fontFamily = new Setting("Segoe UI", $("#font"), "font-family", {
                 "css": {
                     "font-family": ["body"]
                 }
             });
 
-            let imageSize = new NumberSetting($("#imageSize"), "image-size", 1, 10);
+            let imageSize = new NumberSetting("6", $("#imageSize"), "image-size", 1, 10);
             imageSize.onupdate = function(value){
                 gm.setNumImages(value);
             }

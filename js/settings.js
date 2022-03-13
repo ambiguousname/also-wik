@@ -1,7 +1,7 @@
 class Setting {
-    constructor(element, name, targets){
+    constructor(defaultSetting, element, name, targets){
         this.element = element;
-        this.default = element.val();
+        this.default = defaultSetting;
         this.name = name;
         if (targets !== undefined){
             this.targets = targets;
@@ -60,8 +60,8 @@ class Setting {
 }
 
 class NumberSetting extends Setting {
-    constructor(element, name, min, max, targets, suffix){
-        super(element, name, targets);
+    constructor(defaultSetting, element, name, min, max, targets, suffix){
+        super(defaultSetting, element, name, targets);
         this.min = min;
         this.max = max;
 
@@ -94,15 +94,15 @@ class NumberSetting extends Setting {
     }
 
     update(){
-        if (this.element.val() < this.min){
+        let val = parseInt(this.element.val());
+        if (val < this.min){
             return this.updateVal(this.min);
         }
 
-        if (this.element.val() > this.max){
+        if (val > this.max){
             return this.updateVal(this.max);
         }
 
-        let val = this.element.val();
         super.update(val);
     }
 }
