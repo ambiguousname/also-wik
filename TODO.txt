@@ -1,4 +1,3 @@
 Start/Options menu (Customize number of slides, wikis to pull from, customize transitions?)
 Text transitions (maybe along with image slides?)
-Share button (To copy slideshow)
-Credits slide
+Redesign options?
