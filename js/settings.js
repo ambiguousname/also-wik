@@ -9,7 +9,7 @@ class Setting {
             this.targets = {};
         }
         let storageValue = localStorage.getItem(this.name);
-        if (storageValue !== null){
+        if (storageValue !== undefined && storageValue !== null){
             this.val = storageValue;
             this.update();
         } else {
