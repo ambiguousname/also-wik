@@ -31,14 +31,14 @@ function hideAcknowledge(){
 function changeSecondaryColor(){
     let val = $("#secondary-color").val();
     $(".centered").css("color", val);
-    $(".btn-primary").css("background-color", val);
+    $(".btn-primary,#loading").css("background-color", val);
     localStorage.setItem("secondary-color", val);
 }
 
 function changePrimaryColor(){
     let val = $("#primary-color").val();
-    $("body").css("background-color", val);
-    $(".btn-primary").css("color", val);
+    $("body,.progress").css("background-color", val);
+    $(".btn-primary,#loading").css("color", val);
     localStorage.setItem("primary-color", val);
 }
 

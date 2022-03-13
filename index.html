@@ -85,7 +85,7 @@
                 // Just in case size changes:
                 updateSlideColors();
                 $("#customize").fadeOut(500, function(){
-                    $("#loading").show();
+                    $(".progress").show();
                     var interval = setInterval(function(){
                         let percent = (gm.progress * 100) + "%";
                         $("#loading").css("width", percent);
