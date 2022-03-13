@@ -80,7 +80,8 @@ class GameManager {
         for (var i = 0; i < this.numImages; i++){
             var img_url = this.images[i];
             // Get rid of the beginnings and ends of the image we already know about:
-            img_url = img_url.replace(/a/g, "");
+            img_url = img_url.replace("https://www.wikihow.com/images/", "");
+            img_url = img_url.replace(".jpg", "");
             string += "&img" + i + "=" + img_url;
         }
         return string;
@@ -96,7 +97,7 @@ class GameManager {
                 } else if (key.match(/img\d+/g) !== null){
                     let int = parseInt(key.substr(3));
                     // Placeholder:
-                    let full_path = "https://upload.wikimedia.org/wikipedia/commons" + value + "";
+                    let full_path = "https://www.wikihow.com/images/" + value + ".jpg";
                     this.images[int - 1] = full_path;
                     if (int > this.numImages){
                         this.numImages = int;

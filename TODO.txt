@@ -1,3 +1,5 @@
+Fix code
+Async picture loading during presentation (For faster load times?)
 Start/Options menu (Customize number of slides, wikis to pull from, customize transitions?)
 Text transitions (maybe along with image slides?)
 Redesign options?
