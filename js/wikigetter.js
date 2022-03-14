@@ -58,6 +58,6 @@ class WikihowGetter {
     });
 
         // If we don't get one, ehhh... should be fine to include anyways. Just less visually interesting.
-    return images[0].title;
+    return "https:://www.wikihow.com/images/" + images[0].title;
   }
 }
