@@ -39,19 +39,25 @@ class WikihowGetter {
   async getArticleTitle(){
     // Based on https://www.mediawiki.org/wiki/API:Query
     // grnnamespace=0 tells us to get a random article name.
-    const title_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&generator=random&grnnamespace=0";
+    const title_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&list=random&rnnamespace=0";
     let t = await this.xmlLoadHTML(title_url);
     let text = JSON.parse(t);
-    return Object.values(text.query.pages)[0].title;
+    return text.query.random[0].title;
   }
 
   async getArticleImage(){
-    // We get imageinfo, and we can customize the info we get from iiprop.
-    // We search for it containing the title Step, because that way it's part of an article.
-    const img_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&generator=random&grnnamespace=6&prop=imageinfo&iiprop=url&title=Step";
+    // I can't find a way to only get article images, so we're just going to filter through a bunch and hope we get the right one.
+    const img_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&list=random&rnnamespace=6&rnlimit=5";
+
     let t = await this.xmlLoadHTML(img_url);
-    let text = JSON.parse(t);
-    let root = Object.values(text.query.pages)[0];
-    return root.imageinfo[0].url;
+    let images = JSON.parse(t).query.random;
+    images.forEach(function(page){
+      if (page.title.includes("Step")){
+        return "https:://www.wikihow.com/images/" + page.title;
+      }
+    });
+
+        // If we don't get one, ehhh... should be fine to include anyways. Just less visually interesting.
+    return images[0].title;
   }
 }
