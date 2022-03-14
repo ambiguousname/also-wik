@@ -24,33 +24,25 @@ class GameManager {
 
         var self = this;
 
-        // If we're at the last slide, we want to stop storing the current slideshow to allow for new ones:
         this.Reveal.on('slidechanged', function(){
-            if (Reveal.isLastSlide()){
-                localStorage.removeItem("title");
-                localStorage.removeItem("images");
-                localStorage.removeItem("currSlide");
-                localStorage.removeItem("numImages");
-            } else {
-                localStorage.setItem("title", self.title);
-                localStorage.setItem("images", JSON.stringify(self.images));
-                localStorage.setItem("currSlide", Reveal.getState().indexh);
-                localStorage.setItem("numImages", self.numImages);
+            localStorage.setItem("title", self.title);
+            localStorage.setItem("images", JSON.stringify(self.images));
+            localStorage.setItem("currSlide", Reveal.getState().indexh);
+            localStorage.setItem("numImages", self.numImages);
 
-                if (self.images.length < self.numImages){
-                    if (self.Reveal.getSlidePastCount() >= self.latestSlide && self.timerActive === true){
-                        self.Reveal.slide(self.latestSlide);
-                    } else if (self.timerActive === false && self.Reveal.getSlidePastCount() === self.latestSlide){
-                        self.resetTimer();
+            if (self.images.length < self.numImages){
+                if (self.Reveal.getSlidePastCount() >= self.latestSlide && self.timerActive === true){
+                    self.Reveal.slide(self.latestSlide);
+                } else if (self.timerActive === false && self.Reveal.getSlidePastCount() === self.latestSlide){
+                    self.resetTimer();
+                    self.showTimer();
+                }
+                
+                if (self.timerActive === true){
+                    if (self.Reveal.getSlidePastCount() >= self.latestSlide){
                         self.showTimer();
-                    }
-                    
-                    if (self.timerActive === true){
-                        if (self.Reveal.getSlidePastCount() >= self.latestSlide){
-                            self.showTimer();
-                        } else {
-                            self.hideTimer();
-                        }
+                    } else {
+                        self.hideTimer();
                     }
                 }
             }
@@ -104,19 +96,19 @@ class GameManager {
         var self = this;
         $(".indicator").data("radialIndicator").value(5000);
         var timeInterval = setInterval(function(){
-            time -= 500;
+            time -= 1000;
             $(".indicator").data("radialIndicator").animate(time);
             // 3 seconds have passed:
             if (time === 2000 && self.images.length < self.numImages){
                 self.addImage();
             }
-            if (time <= -500){
+            if (time <= -1000){
                 self.hideTimer();
                 self.latestSlide += 1;
                 clearInterval(timeInterval);
                 self.timerActive = false;
             }
-        }, 500);
+        }, 1000);
     }
 
     showTimer(){
@@ -159,6 +151,7 @@ class GameManager {
                 }
             });
             $(".reveal").fadeIn(500);
+            $("#endPresentation").fadeIn(500);
         });
     }
 
@@ -212,5 +205,6 @@ class GameManager {
         this.images = [];
         this.title = "";
         $(".indicator").remove();
+        $("#endPresentation").fadeOut(500);
     }
 }

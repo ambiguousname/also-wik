@@ -56,3 +56,9 @@ input[type=number]{
 .navigate-left .controls-arrow {
     right: 120%;
 }
+
+.bottom-left {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+}

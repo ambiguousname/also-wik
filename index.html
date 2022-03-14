@@ -33,10 +33,11 @@
                     <p>Play this slideshow again with this code: <textarea id="codeText" style="height:1.5rem;"></textarea></p>
                     <p>
                         <button class="btn btn-primary shadow-none" onclick="copyToClipboard()">Copy code to clipboard</button>
-                        <button class="btn btn-primary shadow-none" onclick="resetSlideshow()">Go Again?</button></p>
+                        <button class="btn btn-primary shadow-none" onclick="resetSlideshow()">Return to Options</button></p>
                 </section>
             </div>
         </div>
+        <button class="btn btn-primary shadow-none bottom-left" id="endPresentation" onclick="resetSlideshow()" style="display: none;">End Presentation</button>
         <div class="centered">
             <div id="acknowledgement" style="display:inline;">
                 <p>What follows is a bunch of random data gathered from wikiHow.</p>
@@ -147,7 +148,7 @@
                 $(".img-section").remove();
                 Reveal.destroy();
                 $("#customize").show();
-                $(".centered").show();
+                $(".centered").fadeIn(500);
             }
             
             $(function(){
