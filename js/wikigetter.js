@@ -13,10 +13,11 @@ class WikihowGetter {
       }, 3000);
     } else {
       console.error("Too many requests to wikiHow! Staggering...");
-      setTimeout(function(){
-        self.xmlLoadHTML(url);
-      }, 3000);
-      return;
+      return new Promise(function(resolve){
+        setTimeout(function(){
+          resolve(self.xmlLoadHTML(url));
+        }, 3000);
+      });
     }
 
     let xml = new XMLHttpRequest();
