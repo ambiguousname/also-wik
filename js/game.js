@@ -76,12 +76,14 @@ class GameManager {
         let secondary = this.settings.getSetting("secondary-color");
         let primary = this.settings.getSetting("primary-color");
         let size = this.settings.getSetting("font-size");
+        let fontFamily = this.settings.getSetting("font-family");
         $("<div class=\"indicator\"></div>").insertAfter(".reveal");
         $(".indicator").radialIndicator({
             barColor: secondary,
             barWidth: parseInt(size)/2,
             barBgColor: primary,
             fontSize: size * 2,
+            fontFamily: fontFamily,
             initValue: 5000,
             maxValue: 5000,
             frameNum: 200,
