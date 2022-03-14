@@ -109,6 +109,7 @@
             fontSize.onrefresh = function(value){
                 $(".slides p, .slides a").css("font-size", value + "px");
                 $(".slides").css("font-size", (value * 2) + "px");
+                $("#endPresentation").css("font-size", (value * 2) + "px");
             }
 
             let fontFamily = new Setting("Segoe UI", $("#font"), "font-family", {

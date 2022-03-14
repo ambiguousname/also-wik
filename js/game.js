@@ -66,6 +66,7 @@ class GameManager {
         let img_url = await this.wikihow.getArticleImage();
         this.images.push(img_url);
         localStorage.setItem("images", JSON.stringify(this.images));
+        $("#codeText").text(this.dumpDataToURL());
         $("#img" + (this.images.length - 1)).append("<img src=\"" + img_url + "\"/>");
         this.Reveal.sync();
     }
@@ -97,6 +98,12 @@ class GameManager {
         $(".indicator").data("radialIndicator").value(5000);
         var timeInterval = setInterval(function(){
             time -= 1000;
+            // If the indicator somehow gets destryoed during this:
+            if ($(".indicator").length === 0){
+                clearInterval(timeInterval);
+                self.timerActive = false;
+                return;
+            }
             $(".indicator").data("radialIndicator").animate(time);
             // 3 seconds have passed:
             if (time === 2000 && self.images.length < self.numImages){
@@ -131,27 +138,26 @@ class GameManager {
             }
         }
         $(".centered").fadeOut(500, function(){
-            self.setTitle();
-
-            $("#codeText").text(self.dumpDataToURL());
-            self.Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true, transition: "slide"}).then(function(){  
-                self.settings.refreshAll();
-                self.Reveal.sync();
-                let slideNum = localStorage.getItem("currSlide");
-                if (slideNum !== null){
-                    self.Reveal.slide(parseInt(slideNum));
-                    self.latestSlide = parseInt(slideNum);
-                } else {
-                    self.latestSlide = 0;
-                }
-                if (self.images.length < self.numImages){
-                    self.createTimer();
-                    self.showTimer();
-                    self.resetTimer();
-                }
+            self.setTitle().then(function(){
+                $("#codeText").text(self.dumpDataToURL());
+                self.Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true, transition: "slide"}).then(function(){  
+                    self.settings.refreshAll();
+                    let slideNum = localStorage.getItem("currSlide");
+                    if (slideNum !== null){
+                        self.Reveal.slide(parseInt(slideNum));
+                        self.latestSlide = parseInt(slideNum);
+                    } else {
+                        self.latestSlide = 0;
+                    }
+                    if (self.images.length < self.numImages){
+                        self.createTimer();
+                        self.showTimer();
+                        self.resetTimer();
+                    }
+                });
+                $(".reveal").fadeIn(500);
+                $("#endPresentation").fadeIn(500);
             });
-            $(".reveal").fadeIn(500);
-            $("#endPresentation").fadeIn(500);
         });
     }
 
