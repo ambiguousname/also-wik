@@ -42,22 +42,24 @@ class WikihowGetter {
     const title_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&list=random&rnnamespace=0";
     let t = await this.xmlLoadHTML(title_url);
     let text = JSON.parse(t);
-    return text.query.random[0].title;
+    return "How to " + text.query.random[0].title;
   }
 
   async getArticleImage(){
     // I can't find a way to only get article images, so we're just going to filter through a bunch and hope we get the right one.
-    const img_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&list=random&rnnamespace=6&rnlimit=5";
+    // For some reason, list doesn't return imageinfo.
+    const img_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&generator=random&grnnamespace=6&grnlimit=5&prop=imageinfo&iiprop=url";
 
     let t = await this.xmlLoadHTML(img_url);
-    let images = JSON.parse(t).query.random;
-    images.forEach(function(page){
+    let text = JSON.parse(t);
+    let images = Object.values(text.query.pages);
+    for (var page of images){
       if (page.title.includes("Step")){
-        return "https:://www.wikihow.com/images/" + page.title;
+        return page.imageinfo[0].url;
       }
-    });
+    }
 
-        // If we don't get one, ehhh... should be fine to include anyways. Just less visually interesting.
-    return "https:://www.wikihow.com/images/" + images[0].title;
+    // If we don't get one, ehhh... should be fine to include anyways. Just less visually interesting.
+    return images[Math.floor(Math.random() * images.length)].imageinfo[0].url;
   }
 }
