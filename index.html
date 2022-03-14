@@ -24,7 +24,7 @@
                     <p>
                         Uses
                         <a href="https://revealjs.com" target="_blank">reveal.js</a>,
-                        <a href="https://jquery.com/" target="_blank">Jquery</a>,
+                        <a href="https://jquery.com/" target="_blank">jQuery</a>,
                         <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>,
                         <a href="https://s-yadav.github.io/radialIndicator/">Radial Indicator</a>,
                         and <a href="https://itsjavi.com/bootstrap-colorpicker/index.html" target="_blank">Bootstrap-Colorpicker</a>.
@@ -37,7 +37,7 @@
                 </section>
             </div>
         </div>
-        <button class="btn btn-primary shadow-none bottom-left" id="endPresentation" onclick="resetSlideshow()" style="display: none;">End Presentation</button>
+        <button class="btn btn-primary shadow-none bottom-left" id="endPresentation" onclick="resetSlideshow()" style="display: none; z-index: 1;">End Presentation</button>
         <div class="centered">
             <div id="acknowledgement" style="display:inline;">
                 <p>What follows is a bunch of random data gathered from wikiHow.</p>
@@ -109,7 +109,7 @@
             fontSize.onrefresh = function(value){
                 $(".slides p, .slides a").css("font-size", value + "px");
                 $(".slides").css("font-size", (value * 2) + "px");
-                $("#endPresentation").css("font-size", (value * 2) + "px");
+                $("#endPresentation").css("font-size", (value * 1.1) + "px");
             }
 
             let fontFamily = new Setting("Segoe UI", $("#font"), "font-family", {

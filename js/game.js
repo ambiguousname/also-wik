@@ -67,7 +67,7 @@ class GameManager {
         this.images.push(img_url);
         localStorage.setItem("images", JSON.stringify(this.images));
         $("#codeText").text(this.dumpDataToURL());
-        $("#img" + (this.images.length - 1)).append("<img src=\"" + img_url + "\"/>");
+        $("#img" + (this.images.length - 1)).append("<img src=\"" + img_url + "\" style=\"z-index: 0;\"/>");
         this.Reveal.sync();
     }
 
