@@ -47,7 +47,7 @@ class GameManager {
     createSlideshow(){
         for (var i = 0; i < this.numImages; i++){
             let text = new TextSlide(false, "Step " + i);
-            const img;
+            var img;
             if (i < this.images.length){
                 img = new ImageSlide(true, this.wikihow, this.images, this.images[i]);
             } else {
@@ -61,7 +61,7 @@ class GameManager {
         $(".reveal").hide();
         $(".centered").fadeOut(500, function(){
             self.setTitle().then(function(){
-                self.slideshow.createPresentation();
+                self.slideshow.createPresentation({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true});
                 $(".reveal").fadeIn(500);
                 $("#endPresentation").fadeIn(500);
             });

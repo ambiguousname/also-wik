@@ -9,11 +9,14 @@ class Slide {
         this.isMade = false;
     }
 
-    makeSlide(id){
-        this.elements.forEach(function(element){
-            $(id).append(element);
-        });
-        this.isMade = true;
+    makeSlide(selector){
+        if (this.elements.length > 0){
+            this.elements.forEach(function(element){
+                $(selector).append(element);
+                console.log($(selector));
+            });
+            this.isMade = true;
+        }
     }
 }
 
@@ -58,12 +61,13 @@ class Slideshow {
             // The latestSlide that we're allowed to reach:
             this.latestSlide = currIndex;
         } else {
-            this.latestSlide = 0;
+            this.latestSlide = startIndex;
         }
 
         this.timerActive = false;
 
-        this.Reveal.on('slidechanged', this.slideChange);
+        var self = this;
+        this.Reveal.on('slidechanged', function(){self.slideChange();});
     }
 
     createTimer(){
@@ -153,10 +157,10 @@ class Slideshow {
     
     // Generate content for the next set of slides:
     updateNextSlides(){
-        for (var i = this.latestSlide; i < this.slides.length; i++){
+        for (var i = this.latestSlide + 1; i < this.slides.length; i++){
             let slide = this.slides[i];
             if (slide.isMade === false){
-                slide.generateSlide().then(slide.makeSlide);
+                slide.generateSlide().then(function() {slide.makeSlide("#slide" + i);});
             }
 
             if (slide.isTimerSlide){
@@ -183,13 +187,19 @@ class Slideshow {
         for (var i = 0; i < this.slides.length; i++){
             $("<section id=\"slide" + i + "\" class=\"createdSlide\"></section>").insertBefore("#end");
             // For any slides that already have generated content:
-            this.slides[i].makeSlide("slide" + i);
+            this.slides[i].makeSlide("#slide" + i);
         }
         
         var self = this;
         self.Reveal.initialize(options).then(function(){
+            self.createTimer();
             self.settings.refreshAll();
             self.Reveal.slide(self.latestSlide);
+            // If we have not yet started the presentation...
+            if (self.startIndex > self.latestSlide){
+                self.showTimer();
+                self.resetTimer();
+            }
         });
     }
 
