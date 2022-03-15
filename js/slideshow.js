@@ -13,7 +13,6 @@ class Slide {
         if (this.elements.length > 0){
             this.elements.forEach(function(element){
                 $(selector).append(element);
-                console.log($(selector));
             });
             this.isMade = true;
         }
@@ -129,20 +128,20 @@ class Slideshow {
     }
 
     slideChange(){
-        localStorage.setItem("title", this.title);
-        localStorage.setItem("images", JSON.stringify(this.images));
         localStorage.setItem("currSlide", this.Reveal.getState().indexh);
-        localStorage.setItem("numImages", this.numImages);
 
         let currSlide = this.Reveal.getSlidePastCount();
         if (this.latestSlide < this.slides.length + this.startIndex){
-            // Are we headed past latestSlide? Then move back.
-            if (currSlide >= this.latestSlide){
+            // Are we headed past latestSlide? And are we trying to restrict movement? Then move back.
+            if (currSlide >= this.latestSlide && this.timerActive === true){
                 this.Reveal.slide(this.latestSlide);
             } else if (this.timerActive === false && currSlide === this.latestSlide){
                 // If we don't have a timer, and we're at the latest allowable slide, create a new timer:
-                self.resetTimer();
-                self.showTimer();
+                this.resetTimer();
+                this.showTimer();
+
+                // And just in case the player is moving past the slide we want, we move them back:
+                this.Reveal.slide(this.latestSlide);
             }
 
             if (this.timerActive === true){
@@ -205,9 +204,6 @@ class Slideshow {
 
     resetPresentation(){
         this.slides = [];
-        localStorage.removeItem("images");
-        localStorage.removeItem("title");
-        localStorage.removeItem("numImages");
         localStorage.removeItem("currSlide");
         $(".indicator").remove();
     }

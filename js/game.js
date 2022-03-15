@@ -46,7 +46,7 @@ class GameManager {
 
     createSlideshow(){
         for (var i = 0; i < this.numImages; i++){
-            let text = new TextSlide(false, "Step " + i);
+            let text = new TextSlide(false, "Step " + (i + 1));
             var img;
             if (i < this.images.length){
                 img = new ImageSlide(true, this.wikihow, this.images, this.images[i]);
@@ -117,6 +117,9 @@ class GameManager {
         this.images = [];
         this.title = "";
 
+        localStorage.removeItem("images");
+        localStorage.removeItem("title");
+        localStorage.removeItem("numImages");
         
         $(".img-section").remove();
         Reveal.destroy();
