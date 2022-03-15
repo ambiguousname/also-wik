@@ -54,7 +54,6 @@ class WikihowGetter {
   async getArticleTitle(){
     // Based on https://www.mediawiki.org/wiki/API:Query
     // rnnamespace=0 tells us to get a random article name.
-    return "HOW TO TEST";
     const title_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&list=random&rnnamespace=0";
     let t = await this.xmlLoadHTML(title_url);
     let text = JSON.parse(t);

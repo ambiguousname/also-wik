@@ -199,6 +199,10 @@ class Slideshow {
                 self.showTimer();
                 self.resetTimer();
             }
+            // Just in case stuff doesn't update:
+            setTimeout(function(){
+                self.Reveal.sync();
+            }, 100);
         });
     }
 

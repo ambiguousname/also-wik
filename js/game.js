@@ -46,7 +46,7 @@ class GameManager {
         $("#newTitle").attr("disabled", "true");
         setTimeout(function(){
             $("#newTitle").removeAttr("disabled");
-        }, 500);
+        }, 700);
         this.title = this.titles.pop();
         $("#titlePreview").text(this.title);
     }
