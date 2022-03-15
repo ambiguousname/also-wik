@@ -3,6 +3,7 @@
     <head>
         <script src="//code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/wikigetter.js"></script>
+        <script src="js/slideshow.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/radialIndicator/1.4.0/radialIndicator.js"></script>
         <link rel="stylesheet" href="dist/reveal.css">
         <link rel="stylesheet" href="dist/theme/white.css">
@@ -142,15 +143,7 @@
             }
 
             function resetSlideshow(){
-                localStorage.removeItem("images");
-                localStorage.removeItem("title");
-                localStorage.removeItem("numImages");
-                localStorage.removeItem("currSlide");
                 gm.reset();
-                $(".img-section").remove();
-                Reveal.destroy();
-                $("#customize").show();
-                $(".centered").fadeIn(500);
             }
             
             $(function(){
