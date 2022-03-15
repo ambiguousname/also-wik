@@ -53,6 +53,8 @@ class Slideshow {
         this.settings = settings;
         this.startIndex = startIndex;
 
+        this.onfinish = function(){};
+
         // Slides should be created before createPresentation() is called via addSlide().
         // Once slides are created, they'll be hidden until the next 
         this.slides = [];
@@ -163,7 +165,7 @@ class Slideshow {
             }
 
             if (slide.isTimerSlide){
-                return;
+                break;
             }
         }
     }
@@ -173,8 +175,11 @@ class Slideshow {
         for (var i = this.latestSlide; i < this.slides.length; i++){
             this.latestSlide += 1;
             if (this.slides[i].isTimerSlide){
-                return;
+                break;
             }
+        }
+        if (this.latestSlide === this.slides.length && this.onfinish !== undefined && this.onfinish !== null){
+            this.onfinish();
         }
     }
 
@@ -192,6 +197,7 @@ class Slideshow {
         var self = this;
         self.Reveal.initialize(options).then(function(){
             self.createTimer();
+            self.hideTimer();
             self.settings.refreshAll();
             self.Reveal.slide(self.latestSlide);
             // If we have not yet started the presentation...
@@ -208,6 +214,7 @@ class Slideshow {
 
     resetPresentation(){
         this.slides = [];
+        this.latestSlide = 0;
         localStorage.removeItem("currSlide");
         $(".indicator").remove();
     }

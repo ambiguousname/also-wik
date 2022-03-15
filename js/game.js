@@ -12,6 +12,10 @@ class GameManager {
         }
 
         this.slideshow = new Slideshow(Reveal, settings, 1, currSlide);
+        var self = this;
+        this.slideshow.onfinish = function(){
+            self.dumpDataToURL();
+        }
 
 
         // For title previewing. We get a whole bunch, and then the user gets one at a time, randomly. Then we get a new batch if they don't like any of them:
