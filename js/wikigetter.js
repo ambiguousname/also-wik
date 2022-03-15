@@ -37,9 +37,23 @@ class WikihowGetter {
     return promise;
   }
 
+  
+  // Based on https://www.mediawiki.org/wiki/API:Query
+  // rnnamespace=0 tells us to get a random article name.
+  async getArticleTitleList(number){
+    const title_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&list=random&rnnamespace=0&rnlimit=" + number;
+    let t = await this.xmlLoadHTML(title_url);
+    let text = JSON.parse(t);
+    let titles = [];
+    Object.values(text.query.random).forEach(function(page){
+      titles.push("How to " + page.title);
+    });
+    return titles;
+  }
+
   async getArticleTitle(){
     // Based on https://www.mediawiki.org/wiki/API:Query
-    // grnnamespace=0 tells us to get a random article name.
+    // rnnamespace=0 tells us to get a random article name.
     return "HOW TO TEST";
     const title_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&list=random&rnnamespace=0";
     let t = await this.xmlLoadHTML(title_url);

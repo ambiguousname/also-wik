@@ -64,6 +64,7 @@
                 </select></p>
                 <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=45 oninput="fontSize.updateValFromElement()">px</p>
                 <p>Number of Images <input type="number" id="imageSize" value="6" min=1 max=10 oninput="imageSize.updateValFromElement()"></p>
+                <p>Title: <label id="titlePreview"></label> <button id="newTitle" onclick="gm.getTitles()">Refresh</button></p>
                 <p>Code (Optional) <input type="text" value="" id="presentcode"/></p>
                 <button class="btn btn-primary shadow-none" onclick="settings.reset()">Reset to Default</button>
                 <button class="btn btn-primary shadow-none" onclick="present()">Present!</button>

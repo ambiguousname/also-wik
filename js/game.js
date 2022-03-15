@@ -14,20 +14,22 @@ class GameManager {
         this.slideshow = new Slideshow(Reveal, settings, 1, currSlide);
 
 
+        // For title previewing. We get a whole bunch, and then the user gets one at a time, randomly. Then we get a new batch if they don't like any of them:
+        this.titles = [];
         this.title = "";
-        const storageTitle = localStorage.getItem("title");
-        if (storageTitle !== null){
-            this.title = storageTitle;
-        }
 
         this.images = [];
         this.setNumImages(numImages);
         const storageImages = localStorage.getItem("images");
         const num = localStorage.getItem("numImages");
-        if (storageImages !== null && num !== null){
+        const storageTitle = localStorage.getItem("title");
+        if (storageImages !== null && num !== null && storageTitle !== null){
             this.images = JSON.parse(storageImages);
             this.numImages = num;
+            this.title = storageTitle;
             this.createSlideshow();
+        } else {
+            this.getTitles();
         }
     }
 
@@ -36,10 +38,20 @@ class GameManager {
         localStorage.setItem("numImages", num);
     }
 
-    async setTitle(){
-        if (this.title === ""){
-            this.title = await this.wikihow.getArticleTitle();
+    async getTitles(){
+        if (this.titles.length === 0){
+            // 6 is roughly good, because we're waiting half a second in between each (so 3 seconds for the full list).
+            this.titles = await this.wikihow.getArticleTitleList(6);
         }
+        $("#newTitle").attr("disabled", "true");
+        setTimeout(function(){
+            $("#newTitle").removeAttr("disabled");
+        }, 500);
+        this.title = this.titles.pop();
+        $("#titlePreview").text(this.title);
+    }
+
+    setTitle(){
         localStorage.setItem("title", this.title);
         $("#title").text(this.title);
     }
@@ -60,11 +72,10 @@ class GameManager {
         var self = this;
         $(".reveal").hide();
         $(".centered").fadeOut(500, function(){
-            self.setTitle().then(function(){
-                self.slideshow.createPresentation({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true});
-                $(".reveal").fadeIn(500);
-                $("#endPresentation").fadeIn(500);
-            });
+            self.setTitle();
+            self.slideshow.createPresentation({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true});
+            $(".reveal").fadeIn(500);
+            $("#endPresentation").fadeIn(500);
         });
     }
 
