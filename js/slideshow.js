@@ -213,6 +213,9 @@ class Slideshow {
     }
 
     resetPresentation(){
+        for (var i = 0; i < this.slides.length){
+            $("#slide" + i).remove();
+        }
         this.slides = [];
         this.latestSlide = 0;
         localStorage.removeItem("currSlide");
