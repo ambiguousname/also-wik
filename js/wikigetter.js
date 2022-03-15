@@ -61,7 +61,6 @@ class WikihowGetter {
   }
 
   async getArticleImage(){
-    return "https://ambiguousname.github.io/assets/images/tree.png";
     // I can't find a way to only get article images, so we're just going to filter through a bunch and hope we get the right one.
     // For some reason, list doesn't return imageinfo.
     const img_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&generator=random&grnnamespace=6&grnlimit=5&prop=imageinfo&iiprop=url";
