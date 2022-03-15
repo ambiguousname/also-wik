@@ -126,7 +126,7 @@ class GameManager {
 
     reset(){
         this.images = [];
-        this.title = "";
+        this.getTitles();
 
         localStorage.removeItem("images");
         localStorage.removeItem("title");
