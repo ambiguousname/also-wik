@@ -120,7 +120,7 @@
                 }
             });
 
-            let imageSize = new NumberSetting("6", $("#imageSize"), "image-size", 1, 10);
+            let imageSize = new NumberSetting("6", $("#imageSize"), "numImages", 1, 10);
             imageSize.onupdate = function(value){
                 gm.setNumImages(value);
             }

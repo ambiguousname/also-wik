@@ -14,7 +14,7 @@ class GameManager {
         this.slideshow = new Slideshow(Reveal, settings, 1, currSlide);
         var self = this;
         this.slideshow.onfinish = function(){
-            self.dumpDataToURL();
+            $("#codeText").text(self.dumpDataToURL());
         }
 
 
