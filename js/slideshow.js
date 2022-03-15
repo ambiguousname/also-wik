@@ -213,7 +213,7 @@ class Slideshow {
     }
 
     resetPresentation(){
-        for (var i = 0; i < this.slides.length){
+        for (var i = 0; i < this.slides.length; i++){
             $("#slide" + i).remove();
         }
         this.slides = [];
