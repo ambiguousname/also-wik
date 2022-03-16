@@ -172,7 +172,7 @@ class Slideshow {
 
     allowMoveForward(){
         this.Reveal.sync();
-        for (var i = this.latestSlide; i < this.slides.length; i++){
+        for (var i = this.latestSlide; i < this.Reveal.getTotalSlides(); i++){
             this.latestSlide += 1;
             if (this.slides[i].isTimerSlide){
                 break;
