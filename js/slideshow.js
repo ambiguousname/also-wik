@@ -166,7 +166,7 @@ class Slideshow {
         this.Reveal.sync();
         for (var i = this.latestSlide; i < this.Reveal.getTotalSlides(); i++){
             this.latestSlide += 1;
-            if (this.slides[i].isTimerSlide){
+            if (this.slides[this.latestSlide].isTimerSlide){
                 break;
             }
         }
@@ -181,29 +181,34 @@ class Slideshow {
         this.slides.push(slide);
     }
 
-    createPresentation(options){
+    createPresentation(startTimer){
         for (var i = 0; i < this.slides.length; i++){
             $("<section id=\"slide" + i + "\" class=\"createdSlide\"></section>").insertBefore("#end");
             // For any slides that already have generated content:
             this.slides[i].makeSlide("#slide" + i);
         }
         
-        var self = this;
-        self.Reveal.initialize(options).then(function(){
-            self.createTimer();
-            self.hideTimer();
-            self.settings.refreshAll();
-            self.Reveal.slide(self.latestSlide);
-            // If we have not yet started the presentation...
-            if (self.startIndex > self.latestSlide){
-                self.showTimer();
-                self.resetTimer();
-            }
-            // Just in case stuff doesn't update:
-            setTimeout(function(){
-                self.Reveal.sync();
-            }, 100);
-        });
+        this.createTimer();
+        this.hideTimer();
+        this.settings.refreshAll();
+        this.Reveal.lockSlides(0, this.Reveal.getTotalSlides());
+        this.Reveal.slide(this.latestSlide);
+
+        var index = this.latestSlide;
+        while (this.slides[index].isTimerSlide === false){
+            index += 1;
+        }
+        this.Reveal.lockSlides(0, index);
+
+        // If we have not yet started the presentation...
+        if (startTimer){
+            this.showTimer();
+            this.resetTimer();
+        }
+        // Just in case stuff doesn't update:
+        setTimeout(function(){
+            this.Reveal.sync();
+        }, 100);
     }
 
     resetPresentation(){

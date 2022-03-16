@@ -63,7 +63,7 @@ class GameManager {
         $("#title").text(this.title);
     }
 
-    createSlideshow(){
+    createSlideshow(startTimer){
         for (var i = 0; i < this.numImages; i++){
             let text = new TextSlide(false, "Step " + (i + 1));
             var img;
@@ -80,7 +80,7 @@ class GameManager {
         $(".reveal").hide();
         $(".centered").fadeOut(500, function(){
             self.setTitle();
-            self.slideshow.createPresentation({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true});
+            self.slideshow.createPresentation(startTimer);
             $(".reveal").fadeIn(500);
             $("#endPresentation").fadeIn(500);
         });
@@ -91,10 +91,10 @@ class GameManager {
             this.dataFromURL(code);
             if (this.title !== ""){
                 $(".centered").hide();
-                this.createSlideshow();
+                this.createSlideshow(false);
             }
         } else {
-            this.createSlideshow();
+            this.createSlideshow(true);
         }
     }
 
