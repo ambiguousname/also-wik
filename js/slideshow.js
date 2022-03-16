@@ -48,10 +48,9 @@ class TextSlide extends Slide {
 
 // Manage the actual slideshow. This class just cares about manipulating images, text, and the timer. It doesn't care about the overall game structure.
 class Slideshow {
-    constructor(Reveal, settings, startIndex){
+    constructor(Reveal, settings){
         this.Reveal = Reveal;
         this.settings = settings;
-        this.startIndex = startIndex;
 
         var currSlide = localStorage.getItem("currSlide");
         if (currSlide !== null){
@@ -67,11 +66,11 @@ class Slideshow {
         this.slides = [];
 
         var latestIndex = localStorage.getItem("latestSlide");
-        if (currIndex !== null){
+        if (latestIndex !== null){
             // The latestSlide that we're allowed to reach:
             this.latestSlide = latestIndex;
         } else {
-            this.latestSlide = startIndex;
+            this.latestSlide = 0;
         }
 
         this.timerActive = false;
@@ -213,7 +212,7 @@ class Slideshow {
 
         let slideCount = this.slides.length;
         this.Reveal.lockSlides(0, slideCount);
-        this.Reveal.slide(this.latestSlide);
+        this.Reveal.slide(this.currSlide);
 
         var index = this.latestSlide;
         while (this.slides[index].isTimerSlide === false){

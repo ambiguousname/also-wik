@@ -4,7 +4,7 @@ class GameManager {
         this.Reveal = Reveal;
         this.settings = settings;
 
-        this.slideshow = new Slideshow(Reveal, settings, 1);
+        this.slideshow = new Slideshow(Reveal, settings);
         var self = this;
         this.slideshow.onfinish = function(){
             $("#codeText").text(self.dumpDataToURL());
