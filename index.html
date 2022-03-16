@@ -18,6 +18,9 @@
                 <section id ="title-slide">
                 <div id="title" >Test</div>
                 <p class="small">When you see the arrow in the bottom right, click on the arrow, use the right arrow key, scroll your mousewheel, or swipe left.</p>
+                <button class="btn btn-primary shadow-none" id="newTitle" onclick="gm.getTitles()">New Prompt</button>
+                <button class="btn btn-primary shadow-none" onclick="present()">Present!</button> 
+                <button class="btn btn-primary shadown-none">Options</button>
                 </section>
                 <section id="end">
                     <div>The End</div>
@@ -34,18 +37,18 @@
                     <p class="small">Play this slideshow again with this code: <textarea id="codeText" style="height:1.5rem;"></textarea></p>
                     <p>
                         <button class="btn btn-primary shadow-none" onclick="copyToClipboard()">Copy code to clipboard</button>
-                        <button class="btn btn-primary shadow-none" onclick="resetSlideshow()">Return to Options</button></p>
+                        <button class="btn btn-primary shadow-none" onclick="resetSlideshow()">Restart</button></p>
                 </section>
             </div>
         </div>
         <button class="btn btn-primary shadow-none bottom-left" id="endPresentation" onclick="resetSlideshow()" style="display: none; z-index: 1;">End Presentation</button>
-        <div class="centered">
-            <div id="acknowledgement" style="display:inline;">
+        <div class="centered" style="display: none;">
+            <div id="acknowledgement" style="display:none;">
                 <p>What follows is a bunch of random data gathered from wikiHow.</p>
                 <p>In a few seconds, you might see untold horrors sprouted from the wastes of human thought.</p>
                 <button type="button" class="btn btn-primary shadow-none" onclick="hideAcknowledge()">I am okay with this.</button>
             </div>
-            <div id="customize" style="display: none;">
+            <div id="customize">
                 <p>Primary Color <input type="text" class="color" id="primary-color" value="#FFFFFF"></p>
                 <p>Secondary Color <input type="text" class="color" id="secondary-color" value="#000000"></p>
                 <p>Font Family <select class="form-select" name="font" id="font" oninput="fontFamily.updateValFromElement()">
@@ -67,7 +70,6 @@
                 <p>Prompt: <label id="titlePreview"></label> <button id="newTitle" onclick="gm.getTitles()" class="btn btn-primary shadow-none">Refresh</button></p>
                 <p>Code (Optional) <input type="text" value="" id="presentcode"/></p>
                 <button class="btn btn-primary shadow-none" onclick="settings.reset()">Reset to Default</button>
-                <button class="btn btn-primary shadow-none" onclick="present()">Present!</button>
                 </p>
             </div>
         </div>
@@ -80,9 +82,10 @@
             // Just in case I want to make updates later that somehow mess up localStorage:
             localStorage.setItem("version", "1.0.0");
 
-            if (localStorage.getItem("acknowledged") !== null){
-                $("#acknowledgement").hide();
-                $("#customize").show();
+            if (localStorage.getItem("acknowledged") === null){
+                $(".centered").show();
+                $("#acknowledgement").show();
+                $("#customize").hide();
             }
 
             // Create Settings:
@@ -90,7 +93,7 @@
 
             let primary = new Setting("#FFFFFF", $("#primary-color"), "primary-color", {
                 css: {
-                    "background-color": ["body", ".progress"],
+                    "background-color": [".centered", "body", ".progress"],
                     "color": [".btn-primary"]
                 }
             });
@@ -176,6 +179,9 @@
                         secondary.updateVal(e.value);
                     }
                 });
+            });
+            Reveal.initialize().then(function(){
+                Reveal.lockSlides(0, this.latestSlide);
             });
         </script>
     </body>

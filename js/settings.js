@@ -137,7 +137,8 @@ class Settings {
 function hideAcknowledge(){
     localStorage.setItem("acknowledged", "true");
     $("#acknowledgement").fadeOut(500, function(){
-        $("#customize").fadeIn(500);
+        $(".centered").hide();
+        $("#customized").show();
     });
 }
 

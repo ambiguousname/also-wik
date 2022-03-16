@@ -1,11 +1,18 @@
 .centered {
     display:flex;
+    position: absolute;
     justify-content: center;
     align-items: center;
     text-align: center;
     left:0;
     right:0;
+    top: 0;
     min-height: 100vh;
+    z-index: 1;
+}
+
+.reveal {
+    z-index: 0;
 }
 
 body {

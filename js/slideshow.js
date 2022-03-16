@@ -121,12 +121,10 @@ class Slideshow {
 
     showTimer(){
         $(".indicator").show();
-        $(".navigate-right").hide();
     }
 
     hideTimer(){
         $(".indicator").hide();
-        $(".navigate-right").show();
     }
 
     slideChange(){
@@ -134,16 +132,10 @@ class Slideshow {
 
         let currSlide = this.Reveal.getSlidePastCount();
         if (this.latestSlide < this.slides.length + this.startIndex){
-            // Are we headed past latestSlide? And are we trying to restrict movement? Then move back.
-            if (currSlide >= this.latestSlide && this.timerActive === true){
-                this.Reveal.slide(this.latestSlide);
-            } else if (this.timerActive === false && currSlide === this.latestSlide){
+            if (this.timerActive === false && currSlide === this.latestSlide){
                 // If we don't have a timer, and we're at the latest allowable slide, create a new timer:
                 this.resetTimer();
                 this.showTimer();
-
-                // And just in case the player is moving past the slide we want, we move them back:
-                this.Reveal.slide(this.latestSlide);
             }
 
             if (this.timerActive === true){
@@ -178,6 +170,8 @@ class Slideshow {
                 break;
             }
         }
+        this.Reveal.lockSlides(0, this.latestSlide);
+
         if (this.latestSlide === this.Reveal.getTotalSlides() && this.onfinish !== undefined && this.onfinish !== null){
             this.onfinish();
         }
