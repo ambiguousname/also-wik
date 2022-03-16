@@ -15,6 +15,8 @@ class GameManager {
         this.titles = [];
         this.title = "";
 
+        this.transition = "";
+
         this.images = [];
         this.setNumImages(numImages);
         const storageImages = localStorage.getItem("images");
@@ -86,7 +88,7 @@ class GameManager {
         $("#codeParagraph").fadeOut();
         $("#endPresentation").fadeIn(500);
 
-        this.slideshow.createPresentation();
+        this.slideshow.createPresentation(this.transition);
     }
 
     async present(code){

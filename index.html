@@ -78,6 +78,15 @@
                 </select></p>
                 <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=40 oninput="fontSize.updateValFromElement()">px</p>
                 <p>Number of Images <input type="number" id="imageSize" value="6" min=1 max=10 oninput="imageSize.updateValFromElement()"></p>
+                <p>Transition Type <select class="form-select" name="transition" id="transition" oninput="transition.updateValFromElement()">
+                    <option value="slide">Slide</option>
+                    <option value="none">None</option>
+                    <option value="fade">Fade</option>
+                    <option value="convex">Convex</option>
+                    <option value="concave">Concave</option>
+                    <option value="zoom">Zoom</option>
+                    <option value="random">Random</option>
+                </select></p>
                 <button class="btn btn-primary shadow-none" onclick="settings.reset()">Reset to Default</button>
                 <button class="btn btn-primary shadow-none" onclick="hideOptions()">Back</button>
                 </p>
@@ -87,8 +96,9 @@
         <script src="dist/reveal.js"></script>
         <script src="js/game.js"></script>
         <script>
+            let version = "1.0.0";
             // Just in case I want to make updates later that somehow mess up localStorage:
-            localStorage.setItem("version", "1.0.0");
+            localStorage.setItem("version", version);
 
             if (localStorage.getItem("acknowledged") === null){
                 $(".centered").show();
@@ -143,11 +153,17 @@
                 gm.setNumImages(value);
             }
 
+            let transition = new Setting("slide", $("#transition"), "transition");
+            transition.onupdate = function(value){
+                gm.transition = value;
+            }
+
             settings.add(primary);
             settings.add(secondary);
             settings.add(fontSize);
             settings.add(fontFamily);
             settings.add(imageSize);
+            settings.add(transition);
 
             let gm = new GameManager(imageSize.val, Reveal, settings);
 

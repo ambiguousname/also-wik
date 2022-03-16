@@ -121,6 +121,7 @@ class Settings {
             setting.updateVal(setting.default);
         }
         localStorage.setItem("acknowledged", "true");
+        localStorage.setItem("version", version);
     }
 
     refreshAll(){

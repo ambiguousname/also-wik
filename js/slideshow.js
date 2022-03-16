@@ -196,10 +196,16 @@ class Slideshow {
         slide.isMade = true;
     }
 
-    createPresentation(){
+    createPresentation(transition){
         for (var i = 0; i < this.slides.length; i++){
             if (this.slides[i].isMade === false){
-                $("<section id=\"slide" + i + "\" class=\"createdSlide future\"></section>").insertBefore("#end");
+                var t = transition;
+                if (transition === "random"){
+                    let transitions = ["none", "fade", "slide", "convex", "concave", "zoom"];
+                    t = transitions[Math.floor(Math.random() * transitions.length)];
+                }
+
+                $("<section id=\"slide" + i + "\" class=\"createdSlide future\" data-transition=\"" + t + "\"></section>").insertBefore("#end");
             
                 // For any slides that already have generated content:
                 this.slides[i].makeSlide("#slide" + i);
