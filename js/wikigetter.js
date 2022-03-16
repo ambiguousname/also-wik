@@ -41,6 +41,7 @@ class WikihowGetter {
   // Based on https://www.mediawiki.org/wiki/API:Query
   // rnnamespace=0 tells us to get a random article name.
   async getArticleTitleList(number){
+    return ["Test", "test", "yes"]
     const title_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&list=random&rnnamespace=0&rnlimit=" + number;
     let t = await this.xmlLoadHTML(title_url);
     let text = JSON.parse(t);
@@ -52,6 +53,7 @@ class WikihowGetter {
   }
 
   async getArticleTitle(){
+    return "Y"
     // Based on https://www.mediawiki.org/wiki/API:Query
     // rnnamespace=0 tells us to get a random article name.
     const title_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&list=random&rnnamespace=0";
@@ -61,6 +63,7 @@ class WikihowGetter {
   }
 
   async getArticleImage(){
+    return "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/LetterT.svg/1200px-LetterT.svg.png";
     // I can't find a way to only get article images, so we're just going to filter through a bunch and hope we get the right one.
     // For some reason, list doesn't return imageinfo.
     const img_url = "https://www.wikihow.com/api.php?action=query&origin=*&format=json&generator=random&grnnamespace=6&grnlimit=5&prop=imageinfo&iiprop=url";

@@ -27,17 +27,21 @@ class GameManager {
         const storageImages = localStorage.getItem("images");
         const num = localStorage.getItem("numImages");
         const storageTitle = localStorage.getItem("title");
-        if (storageImages !== null && num !== null && storageTitle !== null){
-            this.images = JSON.parse(storageImages);
-            this.numImages = num;
-            this.title = storageTitle;
-            this.createSlideshow();
-        } else {
-            this.getTitles();
-        }
-
-        // Just in case we're loading existing slides:
-        $("#codeText").text(self.dumpDataToURL());
+        var self = this;
+        this.Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true}).then(function(){
+            self.Reveal.lockSlides(0, 0);
+            if (storageImages !== null && num !== null && storageTitle !== null){
+                self.images = JSON.parse(storageImages);
+                self.numImages = num;
+                self.title = storageTitle;
+                self.createSlideshow();
+            } else {
+                self.getTitles();
+            }
+    
+            // Just in case we're loading existing slides:
+            $("#codeText").text(self.dumpDataToURL());
+        });
     }
 
     setNumImages(num){
@@ -56,11 +60,8 @@ class GameManager {
         }, 700);
         this.title = this.titles.pop();
         $("#title").text(this.title);
-    }
-
-    setTitle(){
-        localStorage.setItem("title", this.title);
-        $("#title").text(this.title);
+        this.Reveal.sync();
+        setTimeout(function(){this.Reveal.sync();}, 100);
     }
 
     createSlideshow(startTimer){
@@ -76,14 +77,11 @@ class GameManager {
             this.slideshow.addSlide(img);
         }
 
-        var self = this;
-        $(".reveal").hide();
-        $(".centered").fadeOut(500, function(){
-            self.setTitle();
-            self.slideshow.createPresentation(startTimer);
-            $(".reveal").fadeIn(500);
-            $("#endPresentation").fadeIn(500);
-        });
+        $("#newTitle").hide();
+        $("#startPresent").hide();
+        $("#showOptions").hide();
+
+        this.slideshow.createPresentation(startTimer);
     }
 
     async present(code){
@@ -142,9 +140,15 @@ class GameManager {
         $(".img-section").remove();
         Reveal.destroy();
 
-        $("#customize").show();
         $("#endPresentation").fadeOut(500);
-        $(".centered").fadeIn(500);
+        $(".reveal").fadeOut(500, function(){
+            $(".reveal").fadeIn(500);
+        });
+        $("#newTitle").show();
+        $("#startPresent").show();
+        $("#showOptions").show();
+        this.Reveal.lockSlides(0, 0);
+        this.Reveal.slide(0);
 
         this.slideshow.resetPresentation();
     }
