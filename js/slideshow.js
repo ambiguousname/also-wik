@@ -131,7 +131,7 @@ class Slideshow {
         localStorage.setItem("currSlide", this.Reveal.getState().indexh);
 
         let currSlide = this.Reveal.getSlidePastCount();
-        if (this.latestSlide < this.slides.length + this.startIndex){
+        if (this.latestSlide < this.slides.length){
             if (this.timerActive === false && currSlide === this.latestSlide){
                 // If we don't have a timer, and we're at the latest allowable slide, create a new timer:
                 this.resetTimer();
@@ -162,17 +162,18 @@ class Slideshow {
         }
     }
 
+    // Increment latestSlide and lock the new set slides based on what is or isn't a timer slide.
     allowMoveForward(){
         this.Reveal.sync();
-        for (var i = this.latestSlide; i < this.Reveal.getTotalSlides(); i++){
+
+        this.latestSlide += 1;
+        while(this.slides[this.latestSlide].isTimerSlide === false){
             this.latestSlide += 1;
-            if (this.slides[i].isTimerSlide){
-                break;
-            }
         }
+        
         this.Reveal.lockSlides(0, this.latestSlide);
 
-        if (this.latestSlide === this.Reveal.getTotalSlides() && this.onfinish !== undefined && this.onfinish !== null){
+        if (this.latestSlide === this.slides.length && this.onfinish !== undefined && this.onfinish !== null){
             this.onfinish();
         }
     }
@@ -182,32 +183,39 @@ class Slideshow {
         this.Reveal.sync();
     }
 
-    createPresentation(startTimer){
+    addExistingSlide(slide){
+        this.slides.push(slide);
+        slide.isMade = true;
+    }
+
+    createPresentation(){
         for (var i = 0; i < this.slides.length; i++){
             $("<section id=\"slide" + i + "\" class=\"createdSlide future\"></section>").insertBefore("#end");
+            
             // For any slides that already have generated content:
-            this.slides[i].makeSlide("#slide" + i);
+            if (this.slides[i].isMade === false){
+                this.slides[i].makeSlide("#slide" + i);
+            }
         }
         
         this.createTimer();
         this.hideTimer();
         this.settings.refreshAll();
 
-        // If we have not yet started the presentation...
-        if (startTimer){
+        let slideCount = this.slides.length;
+        this.Reveal.lockSlides(0, slideCount);
+        console.log(this.latestSlide);
+        this.Reveal.slide(this.latestSlide);
+
+        var index = this.latestSlide;
+        while (this.slides[index].isTimerSlide === false){
+            index += 1;
+        }
+        this.Reveal.lockSlides(0, index);
+        // If we're at where we started, that means we have a timer slide, so...
+        if (index === this.latestSlide){
             this.showTimer();
             this.resetTimer();
-        } else {
-            // Otherwise, we need to lock based on the current slide:
-            let slideCount = this.Reveal.getTotalSlides();
-            this.Reveal.lockSlides(0, slideCount);
-            this.Reveal.slide(this.latestSlide);
-
-            var index = this.latestSlide;
-            while (this.slides[index].isTimerSlide === false){
-                index += 1;
-            }
-            this.Reveal.lockSlides(0, index);
         }
         // Just in case stuff doesn't update:
         setTimeout(function(){

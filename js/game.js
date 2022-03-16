@@ -64,7 +64,9 @@ class GameManager {
         setTimeout(function(){this.Reveal.sync();}, 100);
     }
 
-    createSlideshow(startTimer){
+    createSlideshow(){
+        let start = new Slide(true);
+        this.slideshow.addExistingSlide(start);
         for (var i = 0; i < this.numImages; i++){
             let text = new TextSlide(false, "Step " + (i + 1));
             var img;
@@ -76,12 +78,14 @@ class GameManager {
             this.slideshow.addSlide(text);
             this.slideshow.addSlide(img);
         }
+        let end = new Slide(false);
+        this.slideshow.addExistingSlide(end);
 
         $("#newTitle").hide();
         $("#startPresent").hide();
         $("#showOptions").hide();
 
-        this.slideshow.createPresentation(startTimer);
+        this.slideshow.createPresentation();
     }
 
     async present(code){
@@ -89,10 +93,10 @@ class GameManager {
             this.dataFromURL(code);
             if (this.title !== ""){
                 $(".centered").hide();
-                this.createSlideshow(false);
+                this.createSlideshow();
             }
         } else {
-            this.createSlideshow(true);
+            this.createSlideshow();
         }
     }
 
