@@ -84,7 +84,9 @@
 
             if (localStorage.getItem("acknowledged") === null){
                 $(".centered").show();
-                $("#acknowledgement").fadeIn(500);
+                $("#acknowledgement").fadeIn(500, function(){
+                    $(".reveal").show();
+                });
                 $("#customize").hide();
             } else {
                 setTimeout(function(){

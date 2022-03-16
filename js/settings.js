@@ -136,9 +136,11 @@ class Settings {
 
 function hideAcknowledge(){
     localStorage.setItem("acknowledged", "true");
+    gm.Reveal.sync();
     $("#acknowledgement").fadeOut(500, function(){
         $(".centered").hide();
-        $("#customized").show();
+        $(".reveal").hide();
+        $(".reveal").fadeIn(500);
     });
 }
 

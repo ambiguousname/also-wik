@@ -190,10 +190,10 @@ class Slideshow {
 
     createPresentation(){
         for (var i = 0; i < this.slides.length; i++){
-            $("<section id=\"slide" + i + "\" class=\"createdSlide future\"></section>").insertBefore("#end");
-            
-            // For any slides that already have generated content:
             if (this.slides[i].isMade === false){
+                $("<section id=\"slide" + i + "\" class=\"createdSlide future\"></section>").insertBefore("#end");
+            
+                // For any slides that already have generated content:
                 this.slides[i].makeSlide("#slide" + i);
             }
         }
