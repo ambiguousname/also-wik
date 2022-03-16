@@ -60,6 +60,7 @@ class GameManager {
         }, 700);
         this.title = this.titles.pop();
         $("#title").text(this.title);
+        localStorage.setItem("title", this.title);
         this.Reveal.sync();
         setTimeout(function(){this.Reveal.sync();}, 100);
     }

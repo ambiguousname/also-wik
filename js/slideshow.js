@@ -204,7 +204,6 @@ class Slideshow {
 
         let slideCount = this.slides.length;
         this.Reveal.lockSlides(0, slideCount);
-        console.log(this.latestSlide);
         this.Reveal.slide(this.latestSlide);
 
         var index = this.latestSlide;
