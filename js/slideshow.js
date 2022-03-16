@@ -174,7 +174,7 @@ class Slideshow {
         this.Reveal.sync();
 
         this.latestSlide += 1;
-        while(this.slides[this.latestSlide].isTimerSlide === false){
+        while(this.latestSlide < this.slides.length && this.slides[this.latestSlide].isTimerSlide === false){
             this.latestSlide += 1;
         }
         
@@ -210,14 +210,7 @@ class Slideshow {
         this.hideTimer();
         this.settings.refreshAll();
 
-        let slideCount = this.slides.length;
-        this.Reveal.lockSlides(0, slideCount);
-
-        var index = this.currSlide;
-        while (this.slides[index].isTimerSlide === false){
-            index += 1;
-        }
-        this.Reveal.lockSlides(0, index);
+        this.Reveal.lockSlides(0, this.latestSlide);
         this.Reveal.slide(this.currSlide);
         // If we're locked at slide 0, that means the timer won't get updated during slideChange.
         if (this.latestSlide === 0){

@@ -23,10 +23,13 @@ class GameManager {
         var self = this;
         this.Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true}).then(function(){
             self.Reveal.lockSlides(0, 0);
-            if (storageImages !== null && num !== null && storageTitle !== null){
-                self.images = JSON.parse(storageImages);
+            if (num !== null && storageTitle !== null){
+                if (storageImages !== null){
+                    self.images = JSON.parse(storageImages);
+                }
                 self.numImages = num;
                 self.title = storageTitle;
+                $("#title").text(self.title);
                 self.createSlideshow();
             } else {
                 self.getTitles();
