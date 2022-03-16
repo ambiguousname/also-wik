@@ -4,14 +4,7 @@ class GameManager {
         this.Reveal = Reveal;
         this.settings = settings;
 
-        var currSlide = localStorage.getItem("currSlide");
-        if (currSlide !== null){
-            currSlide = parseInt(currSlide);
-        } else {
-            currSlide = 0;
-        }
-
-        this.slideshow = new Slideshow(Reveal, settings, 1, currSlide);
+        this.slideshow = new Slideshow(Reveal, settings, 1);
         var self = this;
         this.slideshow.onfinish = function(){
             $("#codeText").text(self.dumpDataToURL());
@@ -85,6 +78,7 @@ class GameManager {
         $("#newTitle").hide();
         $("#startPresent").hide();
         $("#showOptions").hide();
+        $("#endPresentation").fadeIn(500);
 
         this.slideshow.createPresentation();
     }

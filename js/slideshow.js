@@ -48,19 +48,28 @@ class TextSlide extends Slide {
 
 // Manage the actual slideshow. This class just cares about manipulating images, text, and the timer. It doesn't care about the overall game structure.
 class Slideshow {
-    constructor(Reveal, settings, startIndex, currIndex){
+    constructor(Reveal, settings, startIndex){
         this.Reveal = Reveal;
         this.settings = settings;
         this.startIndex = startIndex;
+
+        var currSlide = localStorage.getItem("currSlide");
+        if (currSlide !== null){
+            this.currSlide = parseInt(currSlide);
+        } else {
+            this.currSlide = 0;
+        }
 
         this.onfinish = function(){};
 
         // Slides should be created before createPresentation() is called via addSlide().
         // Once slides are created, they'll be hidden until the next 
         this.slides = [];
+
+        var latestIndex = localStorage.getItem("latestSlide");
         if (currIndex !== null){
             // The latestSlide that we're allowed to reach:
-            this.latestSlide = currIndex;
+            this.latestSlide = latestIndex;
         } else {
             this.latestSlide = startIndex;
         }
@@ -128,18 +137,17 @@ class Slideshow {
     }
 
     slideChange(){
-        localStorage.setItem("currSlide", this.Reveal.getState().indexh);
-
-        let currSlide = this.Reveal.getSlidePastCount();
-        if (this.latestSlide < this.slides.length){
-            if (this.timerActive === false && currSlide === this.latestSlide){
+        this.currSlide = this.Reveal.getSlidePastCount();
+        localStorage.setItem("currSlide", this.currSlide);
+        if (this.currSlide < this.slides.length){
+            if (this.timerActive === false && this.currSlide === this.latestSlide){
                 // If we don't have a timer, and we're at the latest allowable slide, create a new timer:
                 this.resetTimer();
                 this.showTimer();
             }
 
             if (this.timerActive === true){
-                if (currSlide >= this.latestSlide){
+                if (this.currSlide >= this.latestSlide){
                     this.showTimer();
                 } else {
                     this.hideTimer();
@@ -176,6 +184,7 @@ class Slideshow {
         if (this.latestSlide === this.slides.length && this.onfinish !== undefined && this.onfinish !== null){
             this.onfinish();
         }
+        localStorage.setItem("latestSlide", this.latestSlide);
     }
 
     addSlide(slide){
@@ -229,6 +238,7 @@ class Slideshow {
         this.slides = [];
         this.latestSlide = 0;
         localStorage.removeItem("currSlide");
+        localStorage.removeItem("latestSlide");
         $(".indicator").remove();
     }
 }
