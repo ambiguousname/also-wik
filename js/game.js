@@ -56,12 +56,12 @@ class GameManager {
         }, 700);
         this.title = this.titles.pop();
         $("#title").text(this.title);
-        localStorage.setItem("title", this.title);
         this.Reveal.sync();
         setTimeout(function(){this.Reveal.sync();}, 100);
     }
 
     createSlideshow(){
+        localStorage.setItem("title", this.title);
         let start = new Slide(true);
         this.slideshow.addExistingSlide(start);
         for (var i = 0; i < this.numImages; i++){
