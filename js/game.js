@@ -75,6 +75,7 @@ class GameManager {
         let end = new Slide(false);
         this.slideshow.addExistingSlide(end);
 
+        $(".keep-size").css("min-height", $(".keep-size").height());
         $("#newTitle").fadeOut();
         $("#startPresent").fadeOut();
         $("#showOptions").fadeOut();
@@ -133,6 +134,9 @@ class GameManager {
         $("#endPresentation").fadeOut(500);
         var self = this;
         $(".reveal").fadeOut(500, function(){
+            self.Reveal.lockSlides(0, 0);
+            self.Reveal.slide(0);
+
             self.images = [];
             self.getTitles();
 
@@ -142,6 +146,8 @@ class GameManager {
             
             $(".img-section").remove();
 
+            
+            $(".keep-size").css("min-height", "");
             $("#newTitle").show();
             $("#startPresent").show();
             $("#showOptions").show();
