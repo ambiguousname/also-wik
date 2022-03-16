@@ -68,7 +68,7 @@ class Slideshow {
         var latestIndex = localStorage.getItem("latestSlide");
         if (latestIndex !== null){
             // The latestSlide that we're allowed to reach:
-            this.latestSlide = latestIndex;
+            this.latestSlide = parseInt(latestIndex);
         } else {
             this.latestSlide = 0;
         }
@@ -214,13 +214,13 @@ class Slideshow {
         this.Reveal.lockSlides(0, slideCount);
         this.Reveal.slide(this.currSlide);
 
-        var index = this.latestSlide;
+        var index = this.currSlide;
         while (this.slides[index].isTimerSlide === false){
             index += 1;
         }
         this.Reveal.lockSlides(0, index);
         // If we're at where we started, that means we have a timer slide, so...
-        if (index === this.latestSlide){
+        if (index === this.currSlide){
             this.showTimer();
             this.resetTimer();
         }
