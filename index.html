@@ -17,12 +17,12 @@
             <div class="slides">
                 <section id ="title-slide">
                 <div id="title" >Test</div>
-                <p>When you see the arrow in the bottom right, click on the bottom right, scroll your mousewheel, or swipe left.</p>
+                <p class="small">When you see the arrow in the bottom right, use the right key arrow, click on the bottom right, scroll your mousewheel, or swipe left.</p>
                 </section>
                 <section id="end">
                     <div>The End</div>
-                    <p>Code by <a href="https://ambiguousname.github.io/" target="_blank">ambiguousname</a></p>
-                    <p>
+                    <p class="small">Code by <a href="https://ambiguousname.github.io/" target="_blank">ambiguousname</a></p>
+                    <p class="small">
                         Uses
                         <a href="https://revealjs.com" target="_blank">reveal.js</a>,
                         <a href="https://jquery.com/" target="_blank">jQuery</a>,
@@ -31,7 +31,7 @@
                         and <a href="https://itsjavi.com/bootstrap-colorpicker/index.html" target="_blank">Bootstrap-Colorpicker</a>.
                         Images and Text from <a href="https://wikihow.com/" target="_blank">wikiHow</a>.
                     </p>
-                    <p>Play this slideshow again with this code: <textarea id="codeText" style="height:1.5rem;"></textarea></p>
+                    <p class="small">Play this slideshow again with this code: <textarea id="codeText" style="height:1.5rem;"></textarea></p>
                     <p>
                         <button class="btn btn-primary shadow-none" onclick="copyToClipboard()">Copy code to clipboard</button>
                         <button class="btn btn-primary shadow-none" onclick="resetSlideshow()">Return to Options</button></p>
@@ -62,9 +62,9 @@
                     <option value="Times New Roman">Times New Roman</option>
                     <option value="Trebuchet MS">Trebuchet MS</option>
                 </select></p>
-                <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=45 oninput="fontSize.updateValFromElement()">px</p>
+                <p>Font Size <input type="number" id="fontSize" value="16" min=1 max=40 oninput="fontSize.updateValFromElement()">px</p>
                 <p>Number of Images <input type="number" id="imageSize" value="6" min=1 max=10 oninput="imageSize.updateValFromElement()"></p>
-                <p>Title: <label id="titlePreview"></label> <button id="newTitle" onclick="gm.getTitles()" class="btn btn-primary shadow-none">Refresh</button></p>
+                <p>Prompt: <label id="titlePreview"></label> <button id="newTitle" onclick="gm.getTitles()" class="btn btn-primary shadow-none">Refresh</button></p>
                 <p>Code (Optional) <input type="text" value="" id="presentcode"/></p>
                 <button class="btn btn-primary shadow-none" onclick="settings.reset()">Reset to Default</button>
                 <button class="btn btn-primary shadow-none" onclick="present()">Present!</button>
@@ -102,7 +102,7 @@
                 }
             });
 
-            let fontSize = new NumberSetting("16", $("#fontSize"), "font-size", 1, 45, {
+            let fontSize = new NumberSetting("16", $("#fontSize"), "font-size", 1, 40, {
                 "css": {
                     "font-size": ["body", ".btn-primary", ".form-select"]
                 }
@@ -110,8 +110,9 @@
 
             fontSize.onrefresh = function(value){
                 $(".slides p, .slides a").css("font-size", value + "px");
+                $(".small, .small a").css("font-size", (value * 0.7) + "px");
                 $(".slides").css("font-size", (value * 2) + "px");
-                $("#endPresentation").css("font-size", (value * 1.1) + "px");
+                $("#endPresentation").css("font-size", (value * 1.5) + "px");
             }
 
             let fontFamily = new Setting("Segoe UI", $("#font"), "font-family", {

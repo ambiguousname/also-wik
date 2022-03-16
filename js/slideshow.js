@@ -178,7 +178,7 @@ class Slideshow {
                 break;
             }
         }
-        if (this.latestSlide === this.slides.length && this.onfinish !== undefined && this.onfinish !== null){
+        if (this.latestSlide === this.Reveal.getTotalSlides() && this.onfinish !== undefined && this.onfinish !== null){
             this.onfinish();
         }
     }

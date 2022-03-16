@@ -35,6 +35,9 @@ class GameManager {
         } else {
             this.getTitles();
         }
+
+        // Just in case we're loading existing slides:
+        $("#codeText").text(self.dumpDataToURL());
     }
 
     setNumImages(num){
