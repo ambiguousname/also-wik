@@ -7,7 +7,6 @@ Uses [reveal.js](https://revealjs.com), [jQuery](https://jquery.com/), [Bootstra
 
 Things I'm thinking of doing:
 - Redesigned Options
-- Get Reveal.js Transitions working
 - Panic Attack Mode (In the style of PechaKucha)
 - Multiple Wikis to Pull From
 - Text Slides

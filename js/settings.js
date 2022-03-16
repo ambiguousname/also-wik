@@ -139,6 +139,7 @@ function hideAcknowledge(){
     gm.Reveal.sync();
     $("#acknowledgement").fadeOut(500, function(){
         $(".centered").hide();
+        $("#customize").show();
         $(".reveal").hide();
         $(".reveal").fadeIn(500);
     });
@@ -147,4 +148,16 @@ function hideAcknowledge(){
 function copyToClipboard(){
     $("#codeText").select();
     navigator.clipboard.writeText($("#codeText").text());
+}
+
+function showOptions(){
+    $(".reveal").fadeOut(500, function(){
+        $(".centered").fadeIn(500);
+    });
+}
+
+function hideOptions() {
+    $(".centered").fadeOut(500, function(){
+        $(".reveal").fadeIn(500);
+    });
 }

@@ -78,6 +78,7 @@ class GameManager {
         $("#newTitle").hide();
         $("#startPresent").hide();
         $("#showOptions").hide();
+        $("#codeParagraph").hide();
         $("#endPresentation").fadeIn(500);
 
         this.slideshow.createPresentation();
@@ -137,7 +138,6 @@ class GameManager {
         localStorage.removeItem("numImages");
         
         $(".img-section").remove();
-        Reveal.destroy();
 
         $("#endPresentation").fadeOut(500);
         $(".reveal").fadeOut(500, function(){
@@ -146,6 +146,7 @@ class GameManager {
         $("#newTitle").show();
         $("#startPresent").show();
         $("#showOptions").show();
+        $("#codeParagraph").show();
         this.Reveal.lockSlides(0, 0);
         this.Reveal.slide(0);
 
