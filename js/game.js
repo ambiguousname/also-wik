@@ -75,6 +75,7 @@ class GameManager {
         let end = new Slide(false);
         this.slideshow.addExistingSlide(end);
 
+        // Because we don't want Reveal.sync() messing with the dimensions of the title slide:
         $(".keep-size").css("min-height", $(".keep-size").height());
         $("#newTitle").fadeOut();
         $("#startPresent").fadeOut();

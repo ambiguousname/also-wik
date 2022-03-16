@@ -212,18 +212,19 @@ class Slideshow {
 
         let slideCount = this.slides.length;
         this.Reveal.lockSlides(0, slideCount);
-        this.Reveal.slide(this.currSlide);
 
         var index = this.currSlide;
         while (this.slides[index].isTimerSlide === false){
             index += 1;
         }
         this.Reveal.lockSlides(0, index);
-        // If we're at where we started, that means we have a timer slide, so...
-        if (index === this.currSlide){
-            this.showTimer();
+        this.Reveal.slide(this.currSlide);
+        // If we're locked at slide 0, that means the timer won't get updated during slideChange.
+        if (this.latestSlide === 0){
             this.resetTimer();
+            this.showTimer();
         }
+
         // Just in case stuff doesn't update:
         setTimeout(function(){
             this.Reveal.sync();
