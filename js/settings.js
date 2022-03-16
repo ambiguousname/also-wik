@@ -158,6 +158,9 @@ function showOptions(){
 
 function hideOptions() {
     $(".centered").fadeOut(500, function(){
-        $(".reveal").fadeIn(500);
+        setTimeout(function(){
+            $(".reveal").fadeIn(500);
+            Reveal.sync();
+        }, 100);
     });
 }
