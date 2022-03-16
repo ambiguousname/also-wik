@@ -97,6 +97,14 @@
         <script src="js/game.js"></script>
         <script>
             let version = "1.0.0";
+            if (localStorage.getItem("version") !== version){
+                // Presentation formats are the most likely thing to change between versions, so on a version upgrade, remove presentation data:
+                localStorage.removeItem("title");
+                localStorage.removeItem("numImages");
+                localStorage.removeItem("currSlide");
+                localStorage.removeItem("images");
+                localStorage.removeItem("latestSlide");
+            }
             // Just in case I want to make updates later that somehow mess up localStorage:
             localStorage.setItem("version", version);
 

@@ -15,7 +15,7 @@ class GameManager {
         this.titles = [];
         this.title = "";
 
-        this.transition = "";
+        this.transition = "slide";
 
         this.images = [];
         this.setNumImages(numImages);
