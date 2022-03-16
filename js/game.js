@@ -130,26 +130,25 @@ class GameManager {
     }
 
     reset(){
-        this.images = [];
-        this.getTitles();
-
-        localStorage.removeItem("images");
-        localStorage.removeItem("title");
-        localStorage.removeItem("numImages");
-        
-        $(".img-section").remove();
-
         $("#endPresentation").fadeOut(500);
+        var self = this;
         $(".reveal").fadeOut(500, function(){
+            self.images = [];
+            self.getTitles();
+
+            localStorage.removeItem("images");
+            localStorage.removeItem("title");
+            localStorage.removeItem("numImages");
+            
+            $(".img-section").remove();
+
+            $("#newTitle").show();
+            $("#startPresent").show();
+            $("#showOptions").show();
+            $("#codeParagraph").show();
+
+            self.slideshow.resetPresentation();
             $(".reveal").fadeIn(500);
         });
-        $("#newTitle").show();
-        $("#startPresent").show();
-        $("#showOptions").show();
-        $("#codeParagraph").show();
-        this.Reveal.lockSlides(0, 0);
-        this.Reveal.slide(0);
-
-        this.slideshow.resetPresentation();
     }
 }
