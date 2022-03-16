@@ -75,10 +75,10 @@ class GameManager {
         let end = new Slide(false);
         this.slideshow.addExistingSlide(end);
 
-        $("#newTitle").hide();
-        $("#startPresent").hide();
-        $("#showOptions").hide();
-        $("#codeParagraph").hide();
+        $("#newTitle").fadeOut();
+        $("#startPresent").fadeOut();
+        $("#showOptions").fadeOut();
+        $("#codeParagraph").fadeOut();
         $("#endPresentation").fadeIn(500);
 
         this.slideshow.createPresentation();
