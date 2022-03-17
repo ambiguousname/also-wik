@@ -24,13 +24,13 @@
         <div class="reveal" style="display: none;">
             <div class="slides">
                 <section id ="title-slide">
-                <div id="title" >Test</div>
+                <div id="title">Test</div>
                 <p>When you see the arrow in the bottom right, click on the arrow, use the right arrow key, scroll your mousewheel, or swipe left.</p>
-                <div class="keep-size"><p id="codeParagraph">Presentation Code (Optional): <input type="text" value="" id="presentcode" oninput="readCode()"/></p>
+                <div class="keep-size"><p id="codeParagraph" class="small">Presentation Code (Optional): <input type="text" value="" id="presentcode" oninput="readCode()"/></p>
 
-                <button class="btn btn-primary shadow-none" id="startPresent" onclick="present()">Present!</button> 
-                <button class="btn btn-primary shadow-none" id="newTitle" onclick="gm.getTitles()">New Prompt</button>
-                <button class="btn btn-primary shadow-none" id="showOptions" onclick="showOptions()">Options</button>
+                <button class="btn btn-primary" id="startPresent" onclick="present()">Present!</button> 
+                <button class="btn btn-primary" id="newTitle" onclick="gm.getTitles()">New Prompt</button>
+                <button class="btn btn-primary" id="showOptions" onclick="showOptions()">Options</button>
                 </div>
                 </section>
                 <section id="end">
@@ -42,22 +42,23 @@
                         <a href="https://jquery.com/" target="_blank">jQuery</a>,
                         <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>,
                         <a href="https://s-yadav.github.io/radialIndicator/">Radial Indicator</a>,
+                        <a href="https://github.com/PimpTrizkit/PJs/wiki/12.-Shade,-Blend-and-Convert-a-Web-Color-(pSBC.js)#--version-2-universal-b--">PJs</a>,
                         and <a href="https://itsjavi.com/bootstrap-colorpicker/index.html" target="_blank">Bootstrap-Colorpicker</a>.
                         Images and Text from <a href="https://wikihow.com/" target="_blank">wikiHow</a>.
                     </p>
                     <p class="small">Play this slideshow again with this code: <textarea id="codeText" style="height:1.5rem;"></textarea></p>
                     <p>
-                        <button class="btn btn-primary shadow-none" onclick="copyToClipboard()">Copy code to clipboard</button>
-                        <button class="btn btn-primary shadow-none" onclick="resetSlideshow()">Restart</button></p>
+                        <button class="btn btn-primary" onclick="copyToClipboard()">Copy code to clipboard</button>
+                        <button class="btn btn-primary" onclick="resetSlideshow()">Restart</button></p>
                 </section>
             </div>
         </div>
-        <button class="btn btn-primary shadow-none bottom-left" id="endPresentation" onclick="resetSlideshow()" style="display: none; z-index: 1;">End Presentation</button>
+        <button class="btn btn-primary bottom-left" id="endPresentation" onclick="resetSlideshow()" style="display: none; z-index: 1;">End Presentation</button>
         <div class="centered" style="display: none;">
             <div id="acknowledgement" style="display:none;">
                 <p>What follows is a bunch of random data gathered from wikiHow.</p>
                 <p>In a few seconds, you might see untold horrors sprouted from the wastes of human thought.</p>
-                <button type="button" class="btn btn-primary shadow-none" onclick="hideAcknowledge()">I am okay with this.</button>
+                <button type="button" class="btn btn-primary" onclick="hideAcknowledge()">I am okay with this.</button>
             </div>
             <div id="customize">
                 <p>Primary Color <input type="text" class="color" id="primary-color" value="#FFFFFF"></p>
@@ -87,8 +88,8 @@
                     <option value="zoom">Zoom</option>
                     <option value="random">Random</option>
                 </select></p>
-                <button class="btn btn-primary shadow-none" onclick="settings.reset()">Reset to Default</button>
-                <button class="btn btn-primary shadow-none" onclick="hideOptions()">Back</button>
+                <button class="btn btn-primary" onclick="settings.reset()">Reset to Default</button>
+                <button class="btn btn-primary" onclick="hideOptions()">Back</button>
                 </p>
             </div>
         </div>
@@ -137,15 +138,36 @@
                 }
             });
 
+            secondary.onrefresh = function(value){
+                let opposite = shadeBlend(0.8, primary.val.toString(), value.toString());
+                $(".btn-primary").hover(function(){
+                    $(this).css("background-color", opposite);
+                }, function(){
+                    $(this).css("background-color", value);
+                });
+
+                
+                let weakerOpposite = shadeBlend(0.5, primary.val.toString(), value.toString());
+                $(".btn-primary").focus(function(){
+                    $(this).css("box-shadow", "0 0 0 .25rem " + weakerOpposite);
+                });
+
+                $(".btn-primary").blur(function(){
+                    $(this).css("box-shadow", "none");
+                });
+            }
+
+            secondary.onrefresh(secondary.val);
+
             let fontSize = new NumberSetting("16", $("#fontSize"), "font-size", 1, 40, {
                 "css": {
-                    "font-size": ["body", ".btn-primary", ".form-select"]
+                    "font-size": ["body", ".btn-primary", ".form-select", ".slides p", ".slides a"],
+                    "height": [".small input"]
                 }
             }, "px");
 
             fontSize.onrefresh = function(value){
-                $(".slides p, .slides a").css("font-size", value + "px");
-                $(".small, .small a").css("font-size", (value * 0.7) + "px");
+                $(".small, .small a").css("font-size", (value * 0.8) + "px");
                 $(".slides").css("font-size", (value * 2) + "px");
                 $("#endPresentation").css("font-size", (value * 1.5) + "px");
             }
