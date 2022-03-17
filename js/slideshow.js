@@ -5,6 +5,10 @@ class Slide {
         this.isMade = false;
     }
 
+    // generateSlide is for Slides that have content that needs to be generated on the fly. If a slide already has content,
+    // then this.elements.length is > 0, and so makeSlide will set .isMade to true when called during createPresentation.
+    // Whenever updateNextSlides is called, generateSlide is also called for whatever slides are not made.
+    // Right now, this is only a thing for image slides.
     async generateSlide(){
         this.isMade = false;
     }
@@ -79,6 +83,7 @@ class Slideshow {
         this.Reveal.on('slidechanged', function(){self.slideChange();});
     }
 
+    // Creates a div containing the radialIndicator stuff for timing. This is created at the start of every presentation and destroyed afterwards.
     createTimer(){
         let secondary = this.settings.getSetting("secondary-color");
         let primary = this.settings.getSetting("primary-color");
@@ -93,13 +98,16 @@ class Slideshow {
             fontFamily: fontFamily,
             initValue: 5000,
             maxValue: 5000,
-            frameNum: 200,
+            frameNum: 200, // I wish there were some better way to change the speed of the timer, but right now it's slow and weird due to me not understanding the API.
+            // Maybe someday I'll switch out radialIndicator for something better that actually counts down continuously.
             format: function(value){
                 return Math.floor(value/1000);
             }
         });
     }
 
+    // Start the timer counting down from 5 seconds. At 3 seconds past, the next slides will be updated, and at the end of the timer, 
+    // the timer will hide itself and unlock the presentation for the next set of slides.
     resetTimer(){
         let time = 5000;
         this.timerActive = true;
@@ -135,6 +143,7 @@ class Slideshow {
         $(".indicator").hide();
     }
 
+    // This is called when Reveal detects a change in the current slide. It's just meant to hide and show the timer depending on what slide we're on.
     slideChange(){
         this.currSlide = this.Reveal.getSlidePastCount();
         localStorage.setItem("currSlide", this.currSlide);

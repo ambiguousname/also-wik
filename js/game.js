@@ -24,8 +24,10 @@ class GameManager {
         const storageTitle = localStorage.getItem("title");
         var self = this;
         this.Reveal.initialize({controlsTutorial: true, controlsBackArrows: "visible", mouseWheel: true}).then(function(){
+            // We lock to the first slide because the main menu is stored there:
             self.Reveal.lockSlides(0, 0);
             if (num !== null && storageTitle !== null){
+                // If we have existing data, we can already start the game:
                 if (storageImages !== null){
                     self.images = JSON.parse(storageImages);
                 }
@@ -34,6 +36,7 @@ class GameManager {
                 $("#title").text(self.title);
                 self.createSlideshow();
             } else {
+                // Otherwise, just generate the title for the main menu.
                 self.getTitles();
             }
     
@@ -62,8 +65,11 @@ class GameManager {
         setTimeout(function(){this.Reveal.sync();}, 100);
     }
 
+    // Function called to start the game. This sets up all the slides we'll need to actually begin the presentation.
     createSlideshow(){
         localStorage.setItem("title", this.title);
+
+        // So now we set up all the slides (we include the start and end slides as existingSlides to not mess with timer functionality in slideshow.js):
         let start = new Slide(true);
         this.slideshow.addExistingSlide(start);
         for (var i = 0; i < this.numImages; i++){
